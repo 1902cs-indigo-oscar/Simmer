@@ -31,7 +31,7 @@ rp(url)
       .text()
       .trim()
       .replace(/\s\s/g, " ")
-      .split(/;\s+|\s\s\s+/);
+      .split(/;\s+|.?\s\s+/);
     article.nutrition = nutr.slice(1, nutr.length - 1);
     article.imageUrl = $(".rec-photo", html).attr("src");
     console.log("article: ", article);
