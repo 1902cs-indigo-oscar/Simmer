@@ -9,7 +9,6 @@ const article = {
 
 rp(url)
   .then(function(html) {
-    //success!
     article.title = $(".recipe-summary__h1", html).text();
     article.author = $(".submitter__name", html).text();
     article.ingredients = $(".checkList__line", html)
@@ -31,6 +30,5 @@ rp(url)
     console.log("article: ", article);
   })
   .catch(function(err) {
-    //handle error
     console.log(err)
   });
