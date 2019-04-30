@@ -1,7 +1,7 @@
 const rp = require("request-promise");
 const $ = require("cheerio");
 const url =
-  "https://www.allrecipes.com/recipe/272457/bacon-ranch-chicken-enchiladas/?internalSource=rotd&referringContentType=Homepage&clickId=cardslot%201";
+  "https://www.allrecipes.com/recipe/213656/amazing-crusted-chicken/?clickId=right%20rail0&internalSource=rr_feed_recipe_sb&referringId=272457%20referringContentType%3Drecipe";
 
 const article = {
   site: "Allrecipes.com"
@@ -16,13 +16,7 @@ rp(url)
       .text()
       .trim()
       .split(/\s\s+/);
-    let prepNums = $(".prepTime__item > time", html)
-      .text()
-      .trim()
-      .split(/\sm/);
-    article.prepTime = prepNums[0];
-    article.cookTime = prepNums[1];
-    article.ReadyIn = prepNums[2];
+    article.times = $('.prepTime__item', html).text().trim().split(/\n\s\s+/)
     article.instructions = $(".recipe-directions__list > li", html)
       .text()
       .trim()
