@@ -10,7 +10,7 @@ const Article = db.define("articles", {
       notEmpty: true
     }
   },
-  siteName: {
+  site: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
@@ -35,7 +35,7 @@ const Article = db.define("articles", {
     }
   },
   instructions: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
+    type: Sequelize.ARRAY(Sequelize.TEXT),
     allowNull: false,
     validate: {
       notEmpty: true
@@ -43,9 +43,6 @@ const Article = db.define("articles", {
   },
   imageUrl: {
     type: Sequelize.STRING,
-    validate: {
-      isUrl: true
-    }
   },
   tags: {
     type: Sequelize.ARRAY(Sequelize.STRING)
