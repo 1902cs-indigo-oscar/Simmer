@@ -4,7 +4,7 @@ const url =
   "https://www.allrecipes.com/recipe/213656/amazing-crusted-chicken/?clickId=right%20rail0&internalSource=rr_feed_recipe_sb&referringId=272457%20referringContentType%3Drecipe";
 
 const article = {
-  site: "Allrecipes"
+  site: "All Recipes"
 };
 
 rp(url)
