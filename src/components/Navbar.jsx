@@ -52,7 +52,7 @@ class Navbar extends Component {
             </Link>
           </div>
         </div>
-        <style jsx>{`
+        <style jsx="">{`
           .navbar-item {
             font-family: 'Aclonica';
           }
