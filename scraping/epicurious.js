@@ -29,9 +29,5 @@ const epicuriousScraper = (url) => {
       console.error(err);
     });  
 }
-const x = async () => {
-  let a = await epicuriousScraper(url);
-  console.log(a)
-};
 
   module.exports = epicuriousScraper;
