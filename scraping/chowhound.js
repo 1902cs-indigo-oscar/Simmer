@@ -1,6 +1,6 @@
 const rp = require("request-promise");
 const $ = require("cheerio");
-const url = "https://www.chowhound.com/recipes/shrimp-po-boy-sandwich-32111";
+// const url = "https://www.chowhound.com/recipes/shrimp-po-boy-sandwich-32111";
 
 const chowhoundScraper = url => {
   return rp(url)
@@ -8,6 +8,7 @@ const chowhoundScraper = url => {
       let article = {
         site: "Chowhound"
       };
+      article.url = url
       article.title = $(".fr_r_info h1", html).text();
       article.ingredients = $(".freyja_box ul", html)
         .text()

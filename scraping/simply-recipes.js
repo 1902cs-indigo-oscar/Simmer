@@ -8,6 +8,7 @@ const simplyrecipesScraper = url => {
       const article = {
         site: "Simply Recipes"
       };
+      article.url = url
       article.title = $(".entry-title", html).text();
       article.author = $(".author", html)
         .text()
