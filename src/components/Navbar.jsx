@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -14,7 +15,7 @@ class Navbar extends Component {
     const { isActive } = this.state;
     return (
       <nav
-        className="navbar is-fixed-top"
+        className="navbar is-fixed-top is-black"
         role="navigation"
         aria-label="main-navigation"
       >
@@ -25,30 +26,29 @@ class Navbar extends Component {
           >
             Simmer
           </Link>
-          <Link
+          <a
             className={`navbar-burger burger ${isActive ? 'is-active' : ''}`}
             aria-label="menu"
             aria-expanded="false"
             role="button"
-            to="/"
             data-target="navbarMenu"
             onClick={this.handleClick}
           >
             <span aria-hidden="true" />
             <span aria-hidden="true" />
             <span aria-hidden="true" />
-          </Link>
+          </a>
         </div>
         <div
           id="navbarMenu"
           className={`navbar-menu ${isActive ? 'is-active' : ''}`}
         >
           <div className="navbar-end">
-            <Link className="navbar-item" to="/login">
+            <Link className="navbar-item has-text-danger" to="/login">
               Log In
             </Link>
-            <Link className="navbar-item" to="/signup">
-              Register
+            <Link className="navbar-item has-text-danger" to="/signup">
+              Sign Up
             </Link>
           </div>
         </div>

@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
 
-class Login extends Component {
+class Signup extends Component {
   state = {
     fields: [
       {
+        name: 'firstName',
+        label: 'First Name',
+        inputType: 'input',
+        fasType: 'fas fa-user',
+      },
+      {
+        name: 'lastName',
+        label: 'Last Name',
+        inputType: 'input',
+        fasType: 'fas fa-user',
+      },
+      {
         name: 'email',
-        label: 'Email',
+        label: 'Email Address',
+        inputType: 'email',
         fasType: 'fas fa-envelope',
       },
       {
         name: 'password',
         label: 'Password',
+        inputType: 'password',
         fasType: 'fas fa-key',
       },
     ],
@@ -20,7 +34,7 @@ class Login extends Component {
     event.preventDefault();
   };
 
-  renderInputFields(name, label, fasType, i) {
+  renderInputFields(name, label, inputType, fasType, i) {
     return (
       <div className="field is-horizontal" key={i}>
         <div className="field-label is-normal">
@@ -31,7 +45,7 @@ class Login extends Component {
             <p className="control is-expanded has-icons-left">
               <input
                 className="input"
-                type={name}
+                type={inputType}
                 placeholder={label}
                 name={name}
               />
@@ -52,12 +66,18 @@ class Login extends Component {
         <section className="hero is-fullheight-with-navbar has-background-primary has-text-centered">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title has-text-weight-semibold">Log In</h1>
+              <h1 className="title has-text-weight-semibold">Sign Up</h1>
               <div className="columns is-centered">
                 <div className="column is-half">
                   <form className="" onSubmit={this.handleSubmit}>
-                    {fields.map(({ name, label, fasType }, i) => {
-                      return this.renderInputFields(name, label, fasType, i);
+                    {fields.map(({ name, label, inputType, fasType }, i) => {
+                      return this.renderInputFields(
+                        name,
+                        label,
+                        inputType,
+                        fasType,
+                        i
+                      );
                     })}
                     <br />
                     <button className="button is-danger" type="submit">
@@ -79,4 +99,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Signup;
