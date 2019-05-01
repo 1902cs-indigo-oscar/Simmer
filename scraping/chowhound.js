@@ -38,15 +38,18 @@ rp(url)
       .map(step => {
         if (parseInt(step[0]) > 0) {
           return step.slice(1);
-        }
-        else {
-          return step
+        } else {
+          return step;
         }
       });
     article.author = instructionsAndAuthor
       .slice(instructionsAndAuthor.length - 1)
       .toString();
     article.imageUrl = $(".fr_hdimgov img", html).attr("data-src");
+    let tags = $(".freyja_fulltags", html)
+      .text()
+      .split(/\n\s+/);
+    article.tags = tags.slice(1, tags.length - 1);
     console.log("article: ", article);
   })
   .catch(function(err) {

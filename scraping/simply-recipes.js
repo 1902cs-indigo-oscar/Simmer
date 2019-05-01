@@ -37,6 +37,14 @@ rp(url)
         }
       });
     article.imageUrl = $(".featured-image > img", html).attr("src");
+    let tags = $(".primary-terms-container", html)
+      .each(function() {
+        $("a", this).append("**");
+      })
+      .text()
+      .trim()
+      .split("**");
+    article.tags = tags.slice(0, tags.length - 1);
     console.log("article: ", article);
   })
   .catch(function(err) {

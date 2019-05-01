@@ -1,7 +1,7 @@
 const rp = require("request-promise");
 const $ = require("cheerio");
 const url =
-  "https://www.foodnetwork.com/recipes/food-network-kitchen/pasta-primavera-recipe-1973397";
+  "https://www.foodnetwork.com/recipes/spring-frittata-recipe-2104680";
 
 const article = {
   site: "Food Network"
@@ -26,6 +26,7 @@ rp(url)
       .trim()
       .split(/\s\s+/);
     article.imageUrl = $(".m-MediaBlock__m-MediaWrap > img", html).attr("src");
+    article.tags = $(".o-Capsule__m-TagList", html).text().trim().split(/\n\s+/)
     console.log("article: ", article);
   })
   .catch(function(err) {
