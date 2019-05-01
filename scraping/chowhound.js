@@ -28,7 +28,7 @@ rp(url)
       times[1] = `Active: ${times[1]}`;
       info = info.concat(times);
     }
-    article.info = info;
+    article.times = info;
     let instructionsAndAuthor = $(".fr_instruction_rec .frr_wrap", html)
       .text()
       .trim()
