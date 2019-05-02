@@ -27,8 +27,8 @@ class App extends Component {
               <Route exact path="/home" component={Homepage} />
               <Route exact path="/" component={Homepage} />
             </Switch>}
-          </Switch>
           {!isLoggedIn && <Route path="/" component={Hero} />}
+          </Switch>
         </div>
       </Router>
     );

@@ -30,6 +30,15 @@ export const fetchSingleArticle = id => async dispatch => {
   }
 };
 
+export const createNewArticle = url => async dispatch => {
+  try {
+    const { data } = await axios.post('/api/articles/', {url});
+    dispatch(getSingleArticle(data));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_ARTICLES:

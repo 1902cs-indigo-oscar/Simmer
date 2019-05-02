@@ -32,6 +32,8 @@ class Signup extends Component {
     ],
   };
 
+  componentWillUnmount() {}
+
   renderInputFields(name, label, inputType, fasType, i) {
     return (
       <div className="field is-horizontal" key={i}>
@@ -83,7 +85,10 @@ class Signup extends Component {
                       Submit
                     </button>
                     {error && error.response && (
-                      <div> {error.response.data} </div>
+                      <div>
+                        <br />
+                        Please enter all fields with valid information.
+                      </div>
                     )}
                   </form>
                 </div>
@@ -114,7 +119,7 @@ const mapDispatch = (dispatch, ownProps) => ({
     const lastName = evt.target.lastName.value;
     const email = evt.target.email.value;
     const password = evt.target.password.value;
-    const {history} = ownProps;
+    const { history } = ownProps;
     dispatch(auth(email, password, formName, firstName, lastName, history));
   },
 });
