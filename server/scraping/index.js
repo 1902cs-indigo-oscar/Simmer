@@ -4,10 +4,12 @@ const epicuriousScraper = require("./epicurious");
 const foodnetworkScraper = require("./food-network");
 const simplyrecipesScraper = require("./simply-recipes");
 
-module.exports = {
-  allrecipesScraper,
-  chowhoundScraper,
-  epicuriousScraper,
-  foodnetworkScraper,
-  simplyrecipesScraper
+const scraperObj = {
+  allrecipes: allrecipesScraper,
+  chowhound: chowhoundScraper,
+  epicurious: epicuriousScraper,
+  foodnetwork: foodnetworkScraper,
+  simplyrecipes: simplyrecipesScraper
 };
+
+module.exports = scraperObj

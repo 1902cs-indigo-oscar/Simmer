@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { Article } = require('../db/models');
+const scraperObj = require('../scraping')
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -20,18 +21,21 @@ router.get('/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     if (req.user) {
-      const newArticle = {
-        url: req.body.url,
-        site: req.body.site,
-        title: req.body.title,
-        author: req.body.author,
-        ingredients: req.body.ingredients,
-        instructions: req.body.instructions,
-        imageUrl: req.body.imageUrl,
-        tags: req.body.tags,
-        misc: req.body.misc,
-        userId: req.user.id,
-      };
+      let urlTail = req.body.url.split('www.')[1]
+      const urlBase = urlTail.split('.com')[0]
+      const newArticle = scraperObj[urlBase]
+      // const newArticle = {
+      //   url: req.body.url,
+      //   site: req.body.site,
+      //   title: req.body.title,
+      //   author: req.body.author,
+      //   ingredients: req.body.ingredients,
+      //   instructions: req.body.instructions,
+      //   imageUrl: req.body.imageUrl,
+      //   tags: req.body.tags,
+      //   misc: req.body.misc,
+      //   userId: req.user.id,
+      // };
       const createdArticle = await Article.create(newArticle);
       res.json(createdArticle);
     }
