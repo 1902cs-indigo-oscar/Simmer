@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "connect-session-sequelize": "^6.0.0",
+    "express-session": "^1.16.1",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
     "pg": "^7.10.0",
     "puppeteer": "^1.15.0",
     "react": "^16.8.6",
@@ -21,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-dev": "concurrently \"npm start\" \"nodemon server\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,5 +42,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:3001/"
 }
