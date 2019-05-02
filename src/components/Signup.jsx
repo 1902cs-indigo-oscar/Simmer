@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { auth } from '../store';
 
 class Signup extends Component {
   state = {
@@ -30,10 +32,6 @@ class Signup extends Component {
     ],
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-  };
-
   renderInputFields(name, label, inputType, fasType, i) {
     return (
       <div className="field is-horizontal" key={i}>
@@ -61,6 +59,7 @@ class Signup extends Component {
 
   render() {
     const { fields } = this.state;
+    const { name, handleSubmit, error } = this.props;
     return (
       <div>
         <section className="hero is-fullheight-with-navbar has-background-primary has-text-centered">
@@ -69,7 +68,7 @@ class Signup extends Component {
               <h1 className="title has-text-weight-semibold">Sign Up</h1>
               <div className="columns is-centered">
                 <div className="column is-half">
-                  <form className="" onSubmit={this.handleSubmit}>
+                  <form className="" onSubmit={handleSubmit} name={name}>
                     {fields.map(({ name, label, inputType, fasType }, i) => {
                       return this.renderInputFields(
                         name,
@@ -83,6 +82,9 @@ class Signup extends Component {
                     <button className="button is-danger" type="submit">
                       Submit
                     </button>
+                    {error && error.response && (
+                      <div> {error.response.data} </div>
+                    )}
                   </form>
                 </div>
               </div>
@@ -99,4 +101,24 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+const mapState = state => ({
+  name: 'signup',
+  error: state.user.error,
+});
+
+const mapDispatch = dispatch => ({
+  handleSubmit(evt) {
+    evt.preventDefault();
+    const formName = evt.target.name;
+    const firstName = evt.target.firstName.value;
+    const lastName = evt.target.lastName.value;
+    const email = evt.target.email.value;
+    const password = evt.target.password.value;
+    dispatch(auth(email, password, formName, firstName, lastName));
+  },
+});
+
+export default connect(
+  mapState,
+  mapDispatch
+)(Signup);

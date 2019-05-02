@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.3",
     "connect-session-sequelize": "^6.0.0",
     "express-session": "^1.16.1",
@@ -16,6 +17,8 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.0",
     "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "sequelize": "^5.8.2",
@@ -26,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-dev": "concurrently \"npm start\" \"nodemon server\""
+    "start-dev": "nodemon server & npm start"
   },
   "eslintConfig": {
     "extends": "react-app"

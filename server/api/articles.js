@@ -41,6 +41,19 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.get('/:articleId', async (req, res, next) => {
+  try {
+    if (req.user) {
+      const id = Number(req.params.articleId);
+      const article = await Article.findByPk(id);
+      res.json(article);
+    }
+    res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.delete('/:articleId', async (req, res, next) => {
   try {
     if (req.user) {
