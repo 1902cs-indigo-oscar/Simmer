@@ -1,18 +1,21 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logout } from '../store';
 
 class Navbar extends Component {
   state = {
     isActive: false,
   };
 
-  handleClick = event => {
+  handleMobileClick = event => {
     this.setState({ isActive: !this.state.isActive });
   };
 
   render() {
     const { isActive } = this.state;
+    const { isLoggedIn, handleClick } = this.props;
     return (
       <nav
         className="navbar is-fixed-top is-black"
@@ -32,7 +35,7 @@ class Navbar extends Component {
             aria-expanded="false"
             role="button"
             data-target="navbarMenu"
-            onClick={this.handleClick}
+            onClick={this.handleMobileClick}
           >
             <span aria-hidden="true" />
             <span aria-hidden="true" />
@@ -43,14 +46,26 @@ class Navbar extends Component {
           id="navbarMenu"
           className={`navbar-menu ${isActive ? 'is-active' : ''}`}
         >
-          <div className="navbar-end">
-            <Link className="navbar-item has-text-danger" to="/login">
-              Log In
-            </Link>
-            <Link className="navbar-item has-text-danger" to="/signup">
-              Sign Up
-            </Link>
-          </div>
+          {isLoggedIn ? (
+            <div className="navbar-end">
+              <Link
+                className="navbar-item has-text-danger"
+                to="/"
+                onClick={handleClick}
+              >
+                Log Out
+              </Link>
+            </div>
+          ) : (
+            <div className="navbar-end">
+              <Link className="navbar-item has-text-danger" to="/login">
+                Log In
+              </Link>
+              <Link className="navbar-item has-text-danger" to="/signup">
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
         <style jsx="">{`
           .navbar-item {
@@ -62,4 +77,17 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+const mapState = state => ({
+  isLoggedIn: !!state.user.id,
+});
+
+const mapDispatch = dispatch => ({
+  handleClick() {
+    dispatch(logout());
+  },
+});
+
+export default connect(
+  mapState,
+  mapDispatch
+)(Navbar);
