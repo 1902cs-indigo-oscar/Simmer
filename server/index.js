@@ -10,6 +10,7 @@ const { User } = require('./db/models');
 const sessionStore = new SequelizeStore({ db });
 const PORT = process.env.PORT || 3001;
 const app = express();
+const cors = require("cors");
 // const socketio = require('socket.io')
 module.exports = app;
 
@@ -82,10 +83,25 @@ const createApp = () => {
   //   }
   // });
 
-  // sends index.html
-  app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public/index.html'));
-  });
+  if (!process.env.HEADLESS){
+    // sends index.html
+    app.use('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'public/index.html'));
+    });
+  }
+
+  if (process.env.PROXY){
+    app.set("trust proxy", true)
+  }
+
+  if (process.env.CORS){
+    const corsOptions = {
+      origin: "chrome://*",
+      credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization"]
+    }
+    app.use(cors(corsOptions))
+  }
 
   // error handling endware
   app.use((err, req, res, next) => {
