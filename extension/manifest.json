@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Simmer",
+  "version": "1.0",
+  "description": "Scrapes web sites and uploads the contents to the Simmer service.",
+  "browser_action": {
+    "default_title": "Simmer",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "https://simmer.brook.li",
+    "https://loanshark.brook.li",
+    "https://www.google.com",
+    "http://www.googoe.com",
+    "https://mafia.brook.li/"
+  ]
+}

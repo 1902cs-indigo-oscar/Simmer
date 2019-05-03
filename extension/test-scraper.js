@@ -1,0 +1,1 @@
+chrome.runtime.sendMessage({scrapedOutput: document.title.toString()})
