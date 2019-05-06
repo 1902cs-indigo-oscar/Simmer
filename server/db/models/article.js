@@ -43,6 +43,7 @@ const Article = db.define("articles", {
   },
   imageUrl: {
     type: Sequelize.STRING,
+    defaultValue: "https://mamadips.com/wp-content/uploads/2016/11/defimage.gif"
   },
   tags: {
     type: Sequelize.ARRAY(Sequelize.STRING)
