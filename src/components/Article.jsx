@@ -78,7 +78,7 @@ class Article extends Component {
             margin: 3em;
           }
           img {
-            object-fit: cover;
+            width: 300px;
           }
         `}</style>
       </div>
