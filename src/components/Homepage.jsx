@@ -13,7 +13,7 @@ class Homepage extends Component {
       <div className="all-articles-container has-text-centered">
         <div>
           <h1 className="title is-2">{user.firstName}'s Articles</h1>
-          <div className="columns is-centered is-multiline">
+          {articles.length ? <div className="columns is-centered is-multiline">
             {articles.map(article => (
               <div key={article.id} className="column is-one-third">
                 <div className="card" onClick={()=>this.props.history.push(`/articles/${article.id}`)}>
@@ -35,7 +35,7 @@ class Homepage extends Component {
                 </div>
               </div>
             ))}
-          </div>
+          </div> : (<p className="has-text-danger">It looks like you don't have any recipes saved.<br/>Start bookmarking some pages!</p>)}
           <br />
           <form action="submit" name="article" onSubmit={createNewArticle}>
             <input type="text" name="article" />
