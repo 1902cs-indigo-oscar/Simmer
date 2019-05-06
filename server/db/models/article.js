@@ -50,6 +50,8 @@ const Article = db.define("articles", {
   misc: {
     type: Sequelize.ARRAY(Sequelize.STRING)
   }
+},{
+  indexes: [ { unique: true, fields: [ "url" ] } ]
 });
 
 module.exports = Article

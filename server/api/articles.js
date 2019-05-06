@@ -3,6 +3,12 @@ const { Article } = require("../db/models");
 const scraperObj = require("../scraping");
 module.exports = router;
 
+router.all("*", async (req, res, next) => {
+  if (!req.user){
+    res.sendStatus(401)
+  }
+})
+
 router.get("/", async (req, res, next) => {
   try {
     console.log("Hit Me");
@@ -81,3 +87,37 @@ router.delete("/:articleId", async (req, res, next) => {
     next(err);
   }
 });
+
+router.post("/scraped", async (req, res, next) => {
+  const {
+    url, site, title, author, ingredients,
+    instructions, imageUrl, tags, misc
+  } = req.body
+  if (url && site && title && ingredients && instructions){
+    try {
+      const existingArticle = await Article.findOne({
+        where: {
+          url
+        }
+      })
+      if (existingArticle){
+        await req.user.addArticle(existingArticle)
+        res.sendStatus(204)
+      }
+      else {
+        const newArticle = await Article.create({
+          url, site, title, author, ingredients,
+          instructions, imageUrl, tags, misc
+        })
+        await req.user.addArticle(newArticle)
+        res.sendStatus(204)
+      }
+    }
+    catch (err){
+      next(err)
+    }
+  }
+  else {
+    res.sendStatus(400)
+  }
+})
