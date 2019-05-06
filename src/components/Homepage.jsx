@@ -18,7 +18,7 @@ class Homepage extends Component {
               <div key={article.id} className="column is-one-third">
                 <div className="card">
                   <header className="card-header">
-                    <p className="card-header-title is-centered">
+                    <p className="card-header-title is-centered is-size-4">
                       {article.title}
                     </p>
                   </header>
@@ -27,9 +27,9 @@ class Homepage extends Component {
                       <figure className="image is-4by3">
                       <img src={article.imageUrl} alt={article.title} />
                       </figure>
-                      <div className="is-4">
+                      <p className="is-italic">
                         {article.site}
-                      </div>
+                      </p>
                     </div>
                   </div>
                 </div>
