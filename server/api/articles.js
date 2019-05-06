@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Article } = require("../db/models");
+const { Article, User } = require("../db/models");
 const scraperObj = require("../scraping");
 module.exports = router;
 
@@ -11,10 +11,14 @@ router.all("*", async (req, res, next) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    console.log("Hit Me");
     if (req.user) {
       const articles = await Article.findAll({
-        where: { userId: req.user.id }
+        include: [{
+          model: User,
+          where: {
+            id: req.user.id
+          }
+        }]
       });
       res.json(articles);
     } else {
@@ -28,12 +32,9 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     if (req.user) {
-      console.log(req.body.url);
       let urlTail = req.body.url.split("www.")[1];
       const urlBase = urlTail.split(".com")[0];
-      console.log(urlBase);
       const newArticle = await scraperObj[urlBase](req.body.url);
-      console.log("newArticle", newArticle);
       // const newArticle = {
       //   url: req.body.url,
       //   site: req.body.site,
@@ -46,7 +47,17 @@ router.post("/", async (req, res, next) => {
       //   misc: req.body.misc,
       //   userId: req.user.id,
       // };
-      const createdArticle = await Article.create(newArticle);
+      // const createdArticle = await Article.create(newArticle);
+      let createdArticle = await Article.findOne({
+        where: {
+          url: req.body.url
+        }
+      });
+      if (!createdArticle){
+        createdArticle = await Article.create(newArticle);
+      }
+      //Need to figure out why findOrCreate is not working for the above
+      createdArticle.addUser(req.user.id);
       res.json(createdArticle);
     } else {
       res.sendStatus(404);
@@ -60,6 +71,7 @@ router.get("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
       const id = Number(req.params.articleId);
+      console.log("id in route", id)
       const article = await Article.findByPk(id);
       res.json(article);
     } else {
