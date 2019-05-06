@@ -16,7 +16,7 @@ class Homepage extends Component {
           <div className="columns is-centered is-multiline">
             {articles.map(article => (
               <div key={article.id} className="column is-one-third">
-                <div className="card">
+                <div className="card" onClick={()=>this.props.history.push(`/articles/${article.id}`)}>
                   <header className="card-header">
                     <p className="card-header-title is-centered is-size-4">
                       {article.title}

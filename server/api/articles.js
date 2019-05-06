@@ -65,6 +65,7 @@ router.get("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
       const id = Number(req.params.articleId);
+      console.log("id in route", id)
       const article = await Article.findByPk(id);
       res.json(article);
     } else {
