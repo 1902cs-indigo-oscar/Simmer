@@ -7,7 +7,9 @@ router.all("*", async (req, res, next) => {
   if (!req.user){
     res.sendStatus(401)
   }
-  next()
+  else {
+    next()
+  }
 })
 
 router.get("/", async (req, res, next) => {
