@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Hero = () => (
   <section className="hero is-fullheight-with-navbar is-danger">
@@ -13,8 +13,8 @@ const Hero = () => (
       </div>
     </div>
     <style jsx="">{`
-      .container {
-        font-family: 'Aclonica';
+      * {
+        font-family: "Aclonica", sans-serif;
       }
     `}</style>
   </section>

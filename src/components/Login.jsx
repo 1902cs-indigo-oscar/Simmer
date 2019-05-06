@@ -73,7 +73,7 @@ class Login extends Component {
         </section>
         <style jsx="">{`
           * {
-            font-family: 'Aclonica';
+            font-family: "Aclonica", sans-serif;
           }
         `}</style>
       </div>
