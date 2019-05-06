@@ -3,7 +3,7 @@ const { Article } = require("../db/models");
 const scraperObj = require("../scraping");
 module.exports = router;
 
-router.all(async (req, res, next) => {
+router.all("*", async (req, res, next) => {
   if (!req.user){
     res.sendStatus(401)
   }
