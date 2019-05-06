@@ -5,7 +5,6 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    console.log("Hit Me");
     if (req.user) {
       const articles = await Article.findAll({
         where: { userId: req.user.id }
@@ -22,12 +21,9 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     if (req.user) {
-      console.log(req.body.url);
       let urlTail = req.body.url.split("www.")[1];
       const urlBase = urlTail.split(".com")[0];
-      console.log(urlBase);
       const newArticle = await scraperObj[urlBase](req.body.url);
-      console.log("newArticle", newArticle);
       // const newArticle = {
       //   url: req.body.url,
       //   site: req.body.site,
@@ -40,7 +36,17 @@ router.post("/", async (req, res, next) => {
       //   misc: req.body.misc,
       //   userId: req.user.id,
       // };
-      const createdArticle = await Article.create(newArticle);
+      // const createdArticle = await Article.create(newArticle);
+      let createdArticle = await Article.findOne({
+        where: {
+          url: req.body.url
+        }
+      });
+      if (!createdArticle){
+        createdArticle = await Article.create(newArticle);
+      }
+      //Need to figure out why findOrCreate is not working for the above
+      createdArticle.addUser(req.user.id);
       res.json(createdArticle);
     } else {
       res.sendStatus(404);
