@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Homepage from './components/Homepage';
 import { me } from './store/user';
+import Article from './components/Article';
 
 class App extends Component {
   componentDidMount() {
@@ -24,6 +25,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             {isLoggedIn &&
             <Switch>
+              <Route exact path="/articles/:id" component={Article} />
               <Route exact path="/home" component={Homepage} />
               <Route exact path="/" component={Homepage} />
             </Switch>}
