@@ -1,29 +1,41 @@
-const runScriptButton = document.getElementById('run-script-btn')
 
-runScriptButton.addEventListener('click', function(){
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.executeScript(
-            tabs[0].id,
-            {file: 'test-scraper.js'});
+const savePageButton = document.getElementById('save-page-btn')
+const pageSavedMessage = document.getElementById('page-saved-message')
+
+checkLoginStatus();
+
+savePageButton.addEventListener('click', function (event) {
+    event.preventDefault()
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        fetch('https://simmer.brook.li/api/articles', {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                url: tabs[0].url
+            })
+        }).then(response => {
+            if (response.status === 404)
+                pageSavedMessage.innerText = 'Please login to Simmer first.';
+            else
+                response.json().then(data => {
+                    pageSavedMessage.innerText = 'Page saved successfully!';
+                })
+        }).catch(error => {
+            pageSavedMessage.innerText = 'Page saving failed: ' + error
+        })
     })
 })
-
-const scrapedOutputNode = document.getElementById('scraped-output')
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (request.scrapedOutput){
-            scrapedOutputNode.innerText = request.scrapedOutput
-        }
-        return true
-    })
 
 const loginForm = document.getElementById('auth-form')
 const usernameInput = document.getElementById('username')
 const passwordInput = document.getElementById('password')
-const loginOutputNode = document.getElementById('login-status-output')
+const loginErrorMessage = document.getElementById('login-error-message')
 
-loginForm.addEventListener('submit', function(event){
+loginForm.addEventListener('submit', function (event) {
     event.preventDefault()
     fetch('https://simmer.brook.li/auth/login', {
         method: 'POST',
@@ -37,45 +49,51 @@ loginForm.addEventListener('submit', function(event){
             password: passwordInput.value
         })
     }).then(response => {
-        response.json().then(data => {
-            loginOutputNode.innerText = 'Login request: ' + data.email
-        })
+        if (response.status === 401) {
+            loginErrorMessage.innerText = 'wrong username and/or password';
+        }
+        else {
+            response.json().then(data => {
+                checkLoginStatus();
+            })
+        }
     }).catch(error => {
-        loginOutputNode.innerText = 'Login request failed: ' + error
+        loginErrorMessage.innerText = 'Login request failed: ' + error
     })
     loginForm.reset()
 })
 
-const checkLoginButton = document.getElementById('check-login-btn')
+const loginInfo = document.getElementById('login-info')
 
-checkLoginButton.addEventListener('click', function(){
+function checkLoginStatus() {
     fetch('https://simmer.brook.li/auth/me', {
         method: 'GET',
         mode: 'cors',
         credentials: 'include'
     }).then(response => {
-        response.json().then(data => {
-            loginOutputNode.innerText = 'Login status request: ' + data.email
-        })
-
-    }).catch(error => {
-        loginOutputNode.innerText = 'Login status request failed:' + error
-    })
-})
-
-loginOutputNode.innerText = window.origin
-
-const testXhrButton = document.getElementById('test-xhr')
-const xhrOutputNode = document.getElementById('test-xhr-output')
-
-testXhrButton.addEventListener('click', function(){
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.google.com", true)
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            xhrOutputNode.innerText = xhr.responseText
+        if (response.status === 200) {
+            response.json().then(data => {
+                const logoutButton = document.createElement('button');
+                logoutButton.innerText = 'logout';
+                savePageButton.disabled = false;
+                    logoutButton.onclick = function () {
+                        savePageButton.disabled = true;
+                        fetch('https://simmer.brook.li/auth/logout', {
+                            method: 'POST',
+                            mode: 'cors',
+                            credentials: 'include'
+                        }).then(() => {
+                            location.reload();
+                        }).catch(error => {
+                            console.error(error);
+                        })
+                    }
+                loginInfo.innerHTML = '<p>Hello, ' + data.email + '<p>';
+                loginInfo.appendChild(logoutButton);
+            })
         }
-    }
-    xhr.send()
-})
-
+        savePageButton.disabled = true;
+    }).catch(error => {
+        console.error(error);
+    })
+}
