@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { createNewArticle } from "../store";
+import { createNewArticle, fetchAllArticles } from "../store";
 
 class Homepage extends Component {
+  componentDidMount(){
+    this.props.loadAllArticles()
+  }
+
   render() {
     const { articles, createNewArticle } = this.props;
     return (
@@ -31,6 +35,9 @@ const mapDispatch = dispatch => ({
   createNewArticle: evt => {
     const url = evt.target.article.value;
     dispatch(createNewArticle(url));
+  },
+  loadAllArticles: () => {
+    dispatch(fetchAllArticles())
   }
 });
 

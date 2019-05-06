@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Article } = require("../db/models");
+const { Article, User } = require("../db/models");
 const scraperObj = require("../scraping");
 module.exports = router;
 
@@ -7,7 +7,12 @@ router.get("/", async (req, res, next) => {
   try {
     if (req.user) {
       const articles = await Article.findAll({
-        where: { userId: req.user.id }
+        include: [{
+          model: User,
+          where: {
+            id: req.user.id
+          }
+        }]
       });
       res.json(articles);
     } else {
