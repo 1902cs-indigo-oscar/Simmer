@@ -16,7 +16,6 @@ const foodnetworkScraper = url => {
         .text()
         .trim()
         .split(/\s\s+/);
-      console.log(article.ingredients)
       article.misc = $(".o-RecipeInfo", html)
         .text()
         .split(/\s\n+/)
