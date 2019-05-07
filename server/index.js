@@ -96,7 +96,7 @@ const createApp = () => {
 
   if (process.env.CORS){
     const corsOptions = {
-      origin: "chrome://*",
+      origin: "*", // CORS does not support wildcards except exactly "*"
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"]
     }
