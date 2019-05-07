@@ -9,14 +9,6 @@
   },
   "permissions": [
     "activeTab",
-<<<<<<< Updated upstream
     "https://simmer.brook.li/"
-=======
-    "https://simmer.brook.li/",
-    "https://loanshark.brook.li/",
-    "https://www.google.com/",
-    "http://www.googoe.com/",
-    "https://mafia.brook.li/"
->>>>>>> Stashed changes
   ]
 }
