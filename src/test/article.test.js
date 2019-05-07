@@ -1,5 +1,5 @@
 const Article = require("../../server/db/models/article");
-const { foodnetworkScraper } = require("../../server/scraping");
+const { foodnetwork } = require("../../server/scraping");
 const db = require("../../server/db");
 
 beforeEach(() => {
@@ -9,7 +9,7 @@ beforeEach(() => {
 describe("Article Model", () => {
   let articleTest;
   beforeAll(async () => {
-    const scrapeInfo = await foodnetworkScraper(
+    const scrapeInfo = await foodnetwork(
       "https://www.foodnetwork.com/recipes/ree-drummond/shrimp-stir-fry-2171534"
     );
     articleTest = await Article.create(scrapeInfo);
