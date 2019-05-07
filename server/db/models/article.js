@@ -30,9 +30,6 @@ const Article = db.define("articles", {
   ingredients: {
     type: Sequelize.ARRAY(Sequelize.STRING),
     allowNull: false,
-    validate: {
-      notEmpty: true
-    }
   },
   instructions: {
     type: Sequelize.ARRAY(Sequelize.TEXT),

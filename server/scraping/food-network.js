@@ -26,8 +26,8 @@ const foodnetworkScraper = url => {
         .text()
         .trim()
         .split(/\s\s+/);
-      article.imageUrl = $(".m-MediaBlock__m-MediaWrap > img", html).attr(
-        "src"
+      article.imageUrl = $('meta[property="og:image"]', html).attr(
+        "content"
       );
       article.tags = $(".o-Capsule__m-TagList", html)
         .text()
