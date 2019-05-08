@@ -39,6 +39,15 @@ export const createNewArticle = url => async dispatch => {
   }
 };
 
+export const fetchArticlesByIngredient = text => async dispatch => {
+  try {
+    const {data} = await axios.get(`/api/articles/ingredients/${text}`)
+    dispatch(getSingleArticle(data))
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_ARTICLES:

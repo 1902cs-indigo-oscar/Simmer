@@ -128,12 +128,9 @@ router.get("/:articleId", async (req, res, next) => {
 router.delete("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
-      await Article.destroy({
-        where: {
-          id: req.params.articleId,
-          userId: req.user.id
-        }
-      });
+      const id = Number(req.params.articleId)
+      const article = await Article.findByPk(id)
+      article.removeUser(req.user.id)
       res.sendStatus(204);
     } else {
       res.sendStatus(404);
@@ -197,7 +194,7 @@ router.get("/ingredients/:word", async (req, res, next) => {
             [Op.iLike]: `%${req.params.word}%`
           }
         },
-        include: [{ model: Article, as: "article" }]
+        include: [{ model: Article, as: "article"}],
       });
       const articles = ingredArray.map(ingred => ingred.article);
       let uniqueArticle = {};
