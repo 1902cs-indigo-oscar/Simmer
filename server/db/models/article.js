@@ -27,10 +27,10 @@ const Article = db.define("articles", {
   author: {
     type: Sequelize.STRING
   },
-  ingredients: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
-    allowNull: false,
-  },
+  // ingredients: {
+  //   type: Sequelize.ARRAY(Sequelize.STRING),
+  //   allowNull: false,
+  // },
   instructions: {
     type: Sequelize.ARRAY(Sequelize.TEXT),
     allowNull: false,

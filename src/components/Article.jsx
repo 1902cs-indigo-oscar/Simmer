@@ -27,7 +27,7 @@ class Article extends Component {
             <ul>
               {article.ingredients &&
                 article.ingredients.map((ingredient, index) => (
-                  <li key={index}>{">"} {ingredient} {"<"}</li>
+                  <li key={index}>{">"} {ingredient.text} {"<"}</li>
                 ))}
             </ul>
           </div>

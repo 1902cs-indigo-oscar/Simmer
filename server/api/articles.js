@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const { Article, User, Keyword } = require("../db/models");
+const { Article, User, Ingredient } = require("../db/models");
 const scraperObj = require("../scraping");
-const unirest = require("unirest");
+// const unirest = require("unirest");
 const { Op } = require("sequelize");
 module.exports = router;
 
@@ -62,40 +62,43 @@ router.post("/", async (req, res, next) => {
       if (!createdArticle) {
         createdArticle = await Article.create(newArticle);
       }
-      //Need to figure out why findOrCreate is not working for the above
       createdArticle.addUser(req.user.id);
-      //BELOW HERE IS FOR CREATING TAGS
       newArticle.ingredients.forEach(async ingredient => {
-        let analysis = await unirest
-          .post(
-            `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${
-              process.env.GOOGLE_LANGUAGE_API
-            }`
-          )
-          .headers({
-            "content-type": "application/json"
-          })
-          .send({
-            document: {
-              type: "PLAIN_TEXT",
-              content: ingredient
-            }
-          });
-        let keywords = [];
-        analysis.body.tokens.forEach(word => {
-          if (
-            ["ROOT", "DOBJ", "POBJ", "AMOD"].includes(word.dependencyEdge.label)
-          ) {
-            keywords.push(word.text.content.toLowerCase());
-          }
-        });
-        keywords = keywords.join(" ");
-        let newKeyword = await Keyword.findOrCreate({
-          where: { name: keywords }
-        });
-        createdArticle.addKeyword(newKeyword[0].dataValues.id);
+        const newIngred = await Ingredient.create({ text: ingredient });
+        createdArticle.addIngredient(newIngred.id);
       });
-      //END CREATING TAGS BLOCK
+      //BELOW IS USING GOOGLES LANGUAGE API
+      // newArticle.ingredients.forEach(async ingredient => {
+      //   let analysis = await unirest
+      //     .post(
+      //       `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${
+      //         process.env.GOOGLE_LANGUAGE_API
+      //       }`
+      //     )
+      //     .headers({
+      //       "content-type": "application/json"
+      //     })
+      //     .send({
+      //       document: {
+      //         type: "PLAIN_TEXT",
+      //         content: ingredient
+      //       }
+      //     });
+      //   let keywords = [];
+      //   analysis.body.tokens.forEach(word => {
+      //     if (
+      //       ["ROOT", "DOBJ", "POBJ", "AMOD"].includes(word.dependencyEdge.label)
+      //     ) {
+      //       keywords.push(word.text.content.toLowerCase());
+      //     }
+      //   });
+      //   keywords = keywords.join(" ");
+      //   let newKeyword = await Keyword.findOrCreate({
+      //     where: { name: keywords }
+      //   });
+      //   createdArticle.addKeyword(newKeyword[0].dataValues.id);
+      // });
+      //END GOOGLE API BLOCK
       res.json(createdArticle);
     } else {
       res.sendStatus(404);
@@ -110,7 +113,9 @@ router.get("/:articleId", async (req, res, next) => {
     if (req.user) {
       const id = Number(req.params.articleId);
       console.log("id in route", id);
-      const article = await Article.findByPk(id);
+      const article = await Article.findByPk(id, {
+        include: [{ model: Ingredient }]
+      });
       res.json(article);
     } else {
       res.sendStatus(404);
@@ -183,16 +188,18 @@ router.post("/scraped", async (req, res, next) => {
   }
 });
 
-router.get("/keywords/:word", async (req, res, next) => {
+router.get("/ingredients/:word", async (req, res, next) => {
   try {
     if (req.user) {
-      const articles = await Article.findAll({
+      const ingredArray = await Ingredient.findAll({
         where: {
-          ingredients: {
-            [Op.overlap]: ["1 tablespoon extra-virgin olive oil", "5 cups cake flour"]
+          text: {
+            [Op.like]: `%${req.params.word}%`,
           }
-        }
+        },
+        include: [{model: Article, as: 'article'}]
       });
+      const articles = ingredArray.map(ingred => ingred.article)
       res.json(articles);
     } else {
       res.sendStatus(404);
