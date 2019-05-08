@@ -14,27 +14,35 @@ class Article extends Component {
         <div>
           <h1 className="title is-2">{article.title}</h1>
           <h6 className="title is-5">{article.author}</h6>
-          <a href={article.url} className="title is-4 has-text-link is-italic">{article.site}</a>
+          <a href={article.url} className="title is-4 has-text-link is-italic">
+            {article.site}
+          </a>
           <br />
           <img src={article.imageUrl} alt={article.title} />
           <br />
           <div className="ingredients">
-            <h2 className="title-is-3"><u>INGREDIENTS:</u></h2>
+            <h2 className="title-is-3">
+              <u>INGREDIENTS:</u>
+            </h2>
             <ul>
               {article.ingredients &&
                 article.ingredients.map((ingredient, index) => (
-                  <li key={index}>{ingredient}</li>
+                  <li key={index}>{">"} {ingredient} {"<"}</li>
                 ))}
             </ul>
           </div>
           <br />
           <div className="instructions">
-            <h2 className="title-is-3"><u>INSTRUCTIONS:</u></h2>
+            <h2 className="title-is-3">
+              <u>INSTRUCTIONS:</u>
+            </h2>
             <ul>
               {article.instructions &&
                 article.instructions.map((instruction, index) => (
                   <li key={index}>
                     {index + 1}. {instruction}
+                    <br />
+                    <br />
                   </li>
                 ))}
             </ul>
@@ -44,7 +52,9 @@ class Article extends Component {
           <div className="columns">
             <div className="column is-half">
               <div className="tags-list">
-                <h2 className="title-is-3"><u>TAGS:</u></h2>
+                <h2 className="title-is-3">
+                  <u>TAGS:</u>
+                </h2>
                 <ul>
                   {article.tags &&
                     article.tags.map((tag, index) => (
@@ -57,7 +67,9 @@ class Article extends Component {
             </div>
             <div className="column is-half">
               <div className="misc">
-                <h2 className="title-is-3"><u>MISCELLANEOUS:</u></h2>
+                <h2 className="title-is-3">
+                  <u>MISCELLANEOUS:</u>
+                </h2>
                 <ul>
                   {article.misc &&
                     article.misc.map((item, index) => (
@@ -79,6 +91,11 @@ class Article extends Component {
           }
           img {
             width: 300px;
+          }
+          @media only screen and (min-width: 600px) {
+            .instructions {
+              margin: 0 3em;
+            }
           }
         `}</style>
       </div>
