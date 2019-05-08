@@ -194,13 +194,21 @@ router.get("/ingredients/:word", async (req, res, next) => {
       const ingredArray = await Ingredient.findAll({
         where: {
           text: {
-            [Op.like]: `%${req.params.word}%`,
+            [Op.iLike]: `%${req.params.word}%`
           }
         },
-        include: [{model: Article, as: 'article'}]
+        include: [{ model: Article, as: "article" }]
       });
-      const articles = ingredArray.map(ingred => ingred.article)
-      res.json(articles);
+      const articles = ingredArray.map(ingred => ingred.article);
+      let uniqueArticle = {};
+      let filteredArticles = [];
+      articles.forEach(article => {
+        if (!uniqueArticle[article.id]) {
+          filteredArticles.push(article);
+          uniqueArticle[article.id] = true;
+        }
+      });
+      res.json(filteredArticles);
     } else {
       res.sendStatus(404);
     }
