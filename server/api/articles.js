@@ -1,27 +1,29 @@
 const router = require("express").Router();
-const { Article, User } = require("../db/models");
+const { Article, User, Keyword } = require("../db/models");
 const scraperObj = require("../scraping");
+const unirest = require("unirest");
 module.exports = router;
 
 router.all("*", async (req, res, next) => {
-  if (!req.user){
-    res.sendStatus(401)
+  if (!req.user) {
+    res.sendStatus(401);
+  } else {
+    next();
   }
-  else {
-    next()
-  }
-})
+});
 
 router.get("/", async (req, res, next) => {
   try {
     if (req.user) {
       const articles = await Article.findAll({
-        include: [{
-          model: User,
-          where: {
-            id: req.user.id
+        include: [
+          {
+            model: User,
+            where: {
+              id: req.user.id
+            }
           }
-        }]
+        ]
       });
       res.json(articles);
     } else {
@@ -56,11 +58,41 @@ router.post("/", async (req, res, next) => {
           url: req.body.url
         }
       });
-      if (!createdArticle){
+      if (!createdArticle) {
         createdArticle = await Article.create(newArticle);
       }
       //Need to figure out why findOrCreate is not working for the above
       createdArticle.addUser(req.user.id);
+      //BELOW HERE IS FOR CREATING TAGS
+      newArticle.ingredients.forEach(async ingredient => {
+        let analysis = await unirest
+          .post(
+            `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${process.env.GOOGLE_LANGUAGE_API}`
+          )
+          .headers({
+            "content-type": "application/json"
+          })
+          .send({
+            document: {
+              type: "PLAIN_TEXT",
+              content: ingredient
+            }
+          });
+        let keyword = "";
+        analysis.body.tokens.forEach(word => {
+          if (word.dependencyEdge.label === "ROOT") {
+            keyword += (word.text.content).toLowerCase();
+          }
+          if (word.dependencyEdge.label === "DOBJ") {
+            keyword += " " + (word.text.content).toLowerCase();
+          }
+        });
+        let newKeyword = await Keyword.findOrCreate({
+          where: { name: keyword }
+        });
+        createdArticle.addKeyword(newKeyword[0].dataValues.id);
+      });
+      //END CREATING TAGS BLOCK
       res.json(createdArticle);
     } else {
       res.sendStatus(404);
@@ -74,7 +106,7 @@ router.get("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
       const id = Number(req.params.articleId);
-      console.log("id in route", id)
+      console.log("id in route", id);
       const article = await Article.findByPk(id);
       res.json(article);
     } else {
@@ -105,34 +137,82 @@ router.delete("/:articleId", async (req, res, next) => {
 
 router.post("/scraped", async (req, res, next) => {
   const {
-    url, site, title, author, ingredients,
-    instructions, imageUrl, tags, misc
-  } = req.body
-  if (url && site && title && ingredients && instructions){
+    url,
+    site,
+    title,
+    author,
+    ingredients,
+    instructions,
+    imageUrl,
+    tags,
+    misc
+  } = req.body;
+  if (url && site && title && ingredients && instructions) {
     try {
       const existingArticle = await Article.findOne({
         where: {
           url
         }
-      })
-      if (existingArticle){
-        await req.user.addArticle(existingArticle)
-        res.sendStatus(204)
-      }
-      else {
+      });
+      if (existingArticle) {
+        await req.user.addArticle(existingArticle);
+        res.sendStatus(204);
+      } else {
         const newArticle = await Article.create({
-          url, site, title, author, ingredients,
-          instructions, imageUrl, tags, misc
-        })
-        await req.user.addArticle(newArticle)
-        res.sendStatus(204)
+          url,
+          site,
+          title,
+          author,
+          ingredients,
+          instructions,
+          imageUrl,
+          tags,
+          misc
+        });
+        await req.user.addArticle(newArticle);
+        res.sendStatus(204);
       }
+    } catch (err) {
+      next(err);
     }
-    catch (err){
-      next(err)
+  } else {
+    res.sendStatus(400);
+  }
+});
+
+router.post("/keywords", async (req, res, next) => {
+  try {
+    if (req.user) {
+      console.log("keywords route being called");
+      const { ingredients, id } = req.body;
+      ingredients.forEach(async ingredient => {
+        let data = await fetch(
+          `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${
+            process.env.GOOGLE_LANGUAGE_API
+          }`,
+          {
+            document: {
+              type: "PLAIN_TEXT",
+              content: ingredient
+            }
+          }
+        );
+        let keyword = "";
+        data.tokens.forEach(word => {
+          if (word.dependencyEdge.label === "ROOT") {
+            keyword = word.text.content;
+          }
+        });
+        let newKeyword = await Keyword.findOrCreate({
+          where: { name: keyword }
+        });
+        newKeyword.addArticle(id);
+      });
+      res.send("Hi");
+    } else {
+      res.sendStatus(404);
     }
+  } catch (err) {
+    next(err);
   }
-  else {
-    res.sendStatus(400)
-  }
-})
+});
