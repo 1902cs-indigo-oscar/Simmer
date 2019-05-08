@@ -1,7 +1,46 @@
 <html>
 
 <head>
-    <script src="popup.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script type="module" src="popup.js" defer></script>
+    <style>
+        body{
+            background-color: lightblue;
+        }
+        #save-page-btn{
+            height: 30px;
+            font-size: 12px;
+            background: yellow;
+            text-align: center;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #save-page-btn[disabled]{
+            background-color: #cccccc;
+            color: #666666;
+            cursor: auto;
+        }
+        #auth-form > *{
+            margin: 5px;
+        }
+        #login-info button{
+            background-color:#2e466e;
+            -moz-border-radius:17px;
+            -webkit-border-radius:17px;
+            border-radius:17px;
+            border:1px solid #1f2f47;
+            display:inline-block;
+            cursor:pointer;
+            color:#ffffff;
+            font-family:Arial;
+            font-size:15px;
+            padding:6px 13px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #263666;
+        }
+    </style>
 </head>
 
 <body>
@@ -9,7 +48,7 @@
         <button id="save-page-btn" type="button" disabled>Save Page</button>
         <p id='page-saved-message'></p>
     </div>
-    <div id = "login-info">
+    <div id="login-info">
         <form id="auth-form">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" />

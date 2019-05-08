@@ -1,33 +1,44 @@
+// import allrecipesScraper from './scraping/all-recipes.js';
+import scraper from './scraping/index.js';
 
 const savePageButton = document.getElementById('save-page-btn')
 const pageSavedMessage = document.getElementById('page-saved-message')
 
 checkLoginStatus();
+var url, site;
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    url = tabs[0].url;
+    const urlTail = url.split("www.")[1];
+    if (urlTail) site = urlTail.split(".com")[0];
+})
 
 savePageButton.addEventListener('click', function (event) {
     event.preventDefault()
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        fetch('https://simmer.brook.li/api/articles', {
-            method: 'POST',
-            mode: 'cors',
-            credentials: 'include',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                url: tabs[0].url
+    scraper[site](url).then(
+        article => {
+            console.log(article);
+            fetch('https://simmer.brook.li/api/articles/scraped', {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(
+                    article
+                )
+            }).then(response => {
+                console.log(response)
+                if (response.status >= 400 && response.status < 500)
+                    throw new Error('either you haven\'t logged in or the page cannot be scraped')
+                else
+                pageSavedMessage.innerText = 'Page saved successfully!';
+
+            }).catch(error => {
+                pageSavedMessage.innerText = 'Page saving failed: ' + error.message
             })
-        }).then(response => {
-            if (response.status === 404)
-                pageSavedMessage.innerText = 'Please login to Simmer first.';
-            else
-                response.json().then(data => {
-                    pageSavedMessage.innerText = 'Page saved successfully!';
-                })
-        }).catch(error => {
-            pageSavedMessage.innerText = 'Page saving failed: ' + error
-        })
-    })
+        }
+    );
 })
 
 const loginForm = document.getElementById('auth-form')
@@ -75,19 +86,20 @@ function checkLoginStatus() {
             response.json().then(data => {
                 const logoutButton = document.createElement('button');
                 logoutButton.innerText = 'logout';
-                savePageButton.disabled = false;
-                    logoutButton.onclick = function () {
-                        savePageButton.disabled = true;
-                        fetch('https://simmer.brook.li/auth/logout', {
-                            method: 'POST',
-                            mode: 'cors',
-                            credentials: 'include'
-                        }).then(() => {
-                            location.reload();
-                        }).catch(error => {
-                            console.error(error);
-                        })
-                    }
+                if (url && scraper[site] && url.includes('/recipe'))
+                    savePageButton.disabled = false;
+                logoutButton.onclick = function () {
+                    savePageButton.disabled = true;
+                    fetch('https://simmer.brook.li/auth/logout', {
+                        method: 'POST',
+                        mode: 'cors',
+                        credentials: 'include'
+                    }).then(() => {
+                        location.reload();
+                    }).catch(error => {
+                        console.error(error);
+                    })
+                }
                 loginInfo.innerHTML = '<p>Hello, ' + data.email + '<p>';
                 loginInfo.appendChild(logoutButton);
             })
