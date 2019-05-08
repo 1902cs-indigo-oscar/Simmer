@@ -39,7 +39,7 @@ const Article = db.define("articles", {
     }
   },
   imageUrl: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     defaultValue: "https://mamadips.com/wp-content/uploads/2016/11/defimage.gif"
   },
   tags: {

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { Article, User, Keyword } = require("../db/models");
 const scraperObj = require("../scraping");
 const unirest = require("unirest");
+const { Op } = require("sequelize");
 module.exports = router;
 
 router.all("*", async (req, res, next) => {
@@ -67,7 +68,9 @@ router.post("/", async (req, res, next) => {
       newArticle.ingredients.forEach(async ingredient => {
         let analysis = await unirest
           .post(
-            `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${process.env.GOOGLE_LANGUAGE_API}`
+            `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${
+              process.env.GOOGLE_LANGUAGE_API
+            }`
           )
           .headers({
             "content-type": "application/json"
@@ -78,17 +81,17 @@ router.post("/", async (req, res, next) => {
               content: ingredient
             }
           });
-        let keyword = "";
+        let keywords = [];
         analysis.body.tokens.forEach(word => {
-          if (word.dependencyEdge.label === "ROOT") {
-            keyword += (word.text.content).toLowerCase();
-          }
-          if (word.dependencyEdge.label === "DOBJ") {
-            keyword += " " + (word.text.content).toLowerCase();
+          if (
+            ["ROOT", "DOBJ", "POBJ", "AMOD"].includes(word.dependencyEdge.label)
+          ) {
+            keywords.push(word.text.content.toLowerCase());
           }
         });
+        keywords = keywords.join(" ");
         let newKeyword = await Keyword.findOrCreate({
-          where: { name: keyword }
+          where: { name: keywords }
         });
         createdArticle.addKeyword(newKeyword[0].dataValues.id);
       });
@@ -180,35 +183,17 @@ router.post("/scraped", async (req, res, next) => {
   }
 });
 
-router.post("/keywords", async (req, res, next) => {
+router.get("/keywords/:word", async (req, res, next) => {
   try {
     if (req.user) {
-      console.log("keywords route being called");
-      const { ingredients, id } = req.body;
-      ingredients.forEach(async ingredient => {
-        let data = await fetch(
-          `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${
-            process.env.GOOGLE_LANGUAGE_API
-          }`,
-          {
-            document: {
-              type: "PLAIN_TEXT",
-              content: ingredient
-            }
+      const articles = await Article.findAll({
+        where: {
+          ingredients: {
+            [Op.overlap]: ["1 tablespoon extra-virgin olive oil", "5 cups cake flour"]
           }
-        );
-        let keyword = "";
-        data.tokens.forEach(word => {
-          if (word.dependencyEdge.label === "ROOT") {
-            keyword = word.text.content;
-          }
-        });
-        let newKeyword = await Keyword.findOrCreate({
-          where: { name: keyword }
-        });
-        newKeyword.addArticle(id);
+        }
       });
-      res.send("Hi");
+      res.json(articles);
     } else {
       res.sendStatus(404);
     }
