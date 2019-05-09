@@ -57,11 +57,51 @@ describe('A guest user', () => {
     guestSession
       .get('/auth/me')
       .expect(200)
+      .then(res => {
+        expect(res.text).to.equal('');
+        return done();
+      })
+      .catch(err => {
+        return done(err);
+      });
+  });
+});
+
+describe('Logging in a user', () => {
+  it('should work succesfully when given the correct credentials', done => {
+    let loggedInSession = request(app);
+    loggedInSession
+      .post('/auth/login')
+      .send({
+        email: 'johndoe@gmail.com',
+        password: '12345',
+      })
+      .expect(200)
       .end((err, res) => {
         if (err) {
           return done(err);
         }
-        expect(res.text).to.equal('');
+        const resJSON = JSON.parse(res.text);
+        expect(resJSON.firstName).to.equal('John');
+        expect(resJSON.lastName).to.equal('Doe');
+        return done();
+      });
+  });
+
+  it('should fail when given incorrect credentials', done => {
+    let failSession = request(app);
+    failSession
+      .post('/auth/login')
+      .send({
+        email: 'johndoe@gmail.com',
+        password: '123456',
+      })
+      .expect(401)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        expect(res.text).to.equal('Wrong username and/or password');
         return done();
       });
   });

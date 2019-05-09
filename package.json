@@ -31,7 +31,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test-backend": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" --exit",
+    "test-backend": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" --exit",
     "eject": "react-scripts eject",
     "start-dev": "nodemon server & npm start"
   },
