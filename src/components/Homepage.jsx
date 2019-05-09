@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createNewArticle, fetchAllArticles, clearArticles } from "../store";
+import {ArticleList} from './ArticleList'
 
 class Homepage extends Component {
   componentDidMount() {
@@ -18,32 +19,7 @@ class Homepage extends Component {
         <div>
           <h1 className="title is-2">{user.firstName}'s Articles</h1>
           {articles.length ? (
-            <div className="columns is-centered is-multiline">
-              {articles.map(article => (
-                <div key={article.id} className="column is-one-third">
-                  <div
-                    className="card"
-                    onClick={() =>
-                      this.props.history.push(`/articles/${article.id}`)
-                    }
-                  >
-                    <header className="card-header">
-                      <p className="card-header-title is-centered is-size-4">
-                        {article.title}
-                      </p>
-                    </header>
-                    <div className="card-content">
-                      <div className="content">
-                        <figure className="image is-4by3">
-                          <img src={article.imageUrl} alt={article.title} />
-                        </figure>
-                        <p className="is-italic">{article.site}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ArticleList articles={articles}/>
           ) : (
             <p className="has-text-danger">
               It looks like you don't have any recipes saved.

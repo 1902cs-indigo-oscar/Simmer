@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchArticlesByIngredient, clearArticles } from "../store";
+import { ArticleList } from "./ArticleList";
 
-class Homepage extends Component {
-componentWillUnmount(){
-  this.props.clearLoadedArticles()
-}
+class Suggestions extends Component {
+  componentWillUnmount() {
+    this.props.clearLoadedArticles();
+  }
 
   render() {
     const { articles, loadArticlesByText } = this.props;
@@ -27,32 +28,7 @@ componentWillUnmount(){
           </form>
           <br />
           {articles.length ? (
-            <div className="columns is-centered is-multiline">
-              {articles.map(article => (
-                <div key={article.id} className="column is-one-third">
-                  <div
-                    className="card"
-                    onClick={() =>
-                      this.props.history.push(`/articles/${article.id}`)
-                    }
-                  >
-                    <header className="card-header">
-                      <p className="card-header-title is-centered is-size-4">
-                        {article.title}
-                      </p>
-                    </header>
-                    <div className="card-content">
-                      <div className="content">
-                        <figure className="image is-4by3">
-                          <img src={article.imageUrl} alt={article.title} />
-                        </figure>
-                        <p className="is-italic">{article.site}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ArticleList articles={articles} />
           ) : (
             <p className="has-text-danger">
               Enter an ingredient above to find recipes!
@@ -85,7 +61,7 @@ const mapDispatch = dispatch => ({
     evt.preventDefault();
     const text = evt.target.ingredient.value;
     dispatch(fetchArticlesByIngredient(text));
-    evt.target.ingredient.value = ""
+    evt.target.ingredient.value = "";
   },
   clearLoadedArticles: () => dispatch(clearArticles())
 });
@@ -93,4 +69,4 @@ const mapDispatch = dispatch => ({
 export default connect(
   mapState,
   mapDispatch
-)(Homepage);
+)(Suggestions);
