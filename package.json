@@ -31,6 +31,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-backend": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" --exit",
     "eject": "react-scripts eject",
     "start-dev": "nodemon server & npm start"
   },
@@ -49,5 +50,11 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001/"
+  "proxy": "http://localhost:3001/",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2",
+    "supertest-session": "^4.0.0"
+  }
 }
