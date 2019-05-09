@@ -27,6 +27,6 @@ before_deploy:
 deploy:
   provider: script
   skip_cleanup: true
-  script: ssh simmer@simmer.brook.li 'bash ./simmer-deploy-master.sh'
+  script: ssh -o "StrictHostKeyChecking no" simmer@simmer.brook.li 'bash ./simmer-deploy-master.sh'
   on:
     branch: deploy-test
