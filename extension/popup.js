@@ -3,10 +3,6 @@ import scraper from './scraping/index.js';
 const savePageButton = document.getElementById('save-page-btn')
 const pageSavedMessage = document.getElementById('page-saved-message')
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  console.log(tab);
-});
-
 checkLoginStatus();
 var url, site;
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -32,7 +28,7 @@ savePageButton.addEventListener('click', function (event) {
         )
       }).then(response => {
         if (response.status >= 400 && response.status < 500)
-          throw new Error('either you haven\'t logged in or the page cannot be scraped')
+          throw new Error('Sorry, the page cannot be scraped')
         else
           pageSavedMessage.innerText = 'Page saved successfully!';
 

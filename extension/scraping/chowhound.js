@@ -40,9 +40,7 @@ const chowhoundScraper = url => {
             return step;
           }
         });
-      article.author = instructionsAndAuthor
-        .slice(instructionsAndAuthor.length - 1)
-        .toString();
+      article.author = $(".by_line span", html).text();
       article.imageUrl = $(".fr_hdimgov img", html).attr("data-src");
       let tags = $(".freyja_fulltags", html)
         .text()

@@ -7,7 +7,7 @@ const foodnetworkScraper = url => {
       };
       article.url = url
       article.title = $(".o-AssetTitle__a-HeadlineText", html).text();
-      article.author = $(".o-Attribution__a-Name > a", html).text();
+      article.author = $(".o-Attribution__m-Author a", html).text();
       article.ingredients = $(".o-Ingredients__m-Body", html)
         .text()
         .trim()
