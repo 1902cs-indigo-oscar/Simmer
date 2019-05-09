@@ -1,16 +1,18 @@
 <html>
 
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <script type="module" src="popup.js" defer></script>
-    <style>
-        body{
-            background-color: lightblue;
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script type="module" src="popup.js" defer></script>
+  <script type="module" src="background.js"></script>
+  <style>
+    body{
+            background-color: pink;
+            color: black;
         }
         #save-page-btn{
             height: 30px;
             font-size: 12px;
-            background: yellow;
+            background: rgb(255, 0, 0);
             text-align: center;
             border-radius: 5px;
             text-align: center;
@@ -26,38 +28,31 @@
             margin: 5px;
         }
         #login-info button{
-            background-color:#2e466e;
-            -moz-border-radius:17px;
-            -webkit-border-radius:17px;
+            background-color: rgb(220, 0, 0);
             border-radius:17px;
-            border:1px solid #1f2f47;
-            display:inline-block;
             cursor:pointer;
             color:#ffffff;
-            font-family:Arial;
             font-size:15px;
             padding:6px 13px;
-            text-decoration:none;
-            text-shadow:0px 1px 0px #263666;
         }
     </style>
 </head>
 
 <body>
-    <div>
-        <button id="save-page-btn" type="button" disabled>Save Page</button>
-        <p id='page-saved-message'></p>
-    </div>
-    <div id="login-info">
-        <form id="auth-form">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" />
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" />
-            <button type="submit">Login</button>
-        </form>
-        <p id="login-error-message"></p>
-    </div>
+  <div>
+    <button id="save-page-btn" type="button" disabled>Save Page</button>
+    <p id='page-saved-message'></p>
+  </div>
+  <div id="login-info">
+    <form id="auth-form">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" />
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" />
+      <button type="submit">Login</button>
+    </form>
+    <p id="login-error-message"></p>
+  </div>
 </body>
 
 </html>
