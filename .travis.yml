@@ -23,5 +23,5 @@ install:
 before_script:
   - psql -c 'create database "grace-shopper-test";' -U postgres # remember to change this name if you change it elsewhere (e.g. package.json)
 script:
-  - npm test             # test the code
+  - npm run test-backend             # test the code
   - npm run build # make the bundle
