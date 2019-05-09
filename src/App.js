@@ -32,6 +32,11 @@ class App extends Component {
           {!isLoggedIn && <Route path="/" component={Hero} />}
           </Switch>
         </div>
+        <style jsx="">{`
+          * {
+            font-family: "Aclonica", sans-serif;
+          }
+          `}</style>
       </Router>
     );
   }

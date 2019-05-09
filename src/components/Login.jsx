@@ -47,7 +47,6 @@ class Login extends Component {
     const { fields } = this.state;
     const { name, handleSubmit, error } = this.props;
     return (
-      <div>
         <section className="hero is-fullheight-with-navbar has-background-primary has-text-centered">
           <div className="hero-body">
             <div className="container">
@@ -71,12 +70,6 @@ class Login extends Component {
             </div>
           </div>
         </section>
-        <style jsx="">{`
-          * {
-            font-family: "Aclonica", sans-serif;
-          }
-        `}</style>
-      </div>
     );
   }
 }
