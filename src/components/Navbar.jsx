@@ -51,8 +51,8 @@ class Navbar extends Component {
               <Link className="navbar-item has-text-danger" to="/home">
                 Home
               </Link>
-              <Link className="navbar-item has-text-danger" to="/suggestions">
-                Suggestions
+              <Link className="navbar-item has-text-danger" to="/search">
+                Search
               </Link>
               <Link
                 className="navbar-item has-text-danger"

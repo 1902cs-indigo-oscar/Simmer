@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { fetchArticlesByIngredient, clearArticles } from "../store";
 import { ArticleList } from "./ArticleList";
 
-class Suggestions extends Component {
+class Search extends Component {
   componentWillUnmount() {
     this.props.clearLoadedArticles();
   }
@@ -69,4 +69,4 @@ const mapDispatch = dispatch => ({
 export default connect(
   mapState,
   mapDispatch
-)(Suggestions);
+)(Search);

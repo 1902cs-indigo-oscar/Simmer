@@ -128,9 +128,9 @@ router.get("/:articleId", async (req, res, next) => {
 router.delete("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
-      const id = Number(req.params.articleId)
-      const article = await Article.findByPk(id)
-      article.removeUser(req.user.id)
+      const id = Number(req.params.articleId);
+      const article = await Article.findByPk(id);
+      article.removeUser(req.user.id);
       res.sendStatus(204);
     } else {
       res.sendStatus(404);
@@ -185,18 +185,43 @@ router.post("/scraped", async (req, res, next) => {
   }
 });
 
-router.get("/ingredients/:word", async (req, res, next) => {
+router.get("/search/:word", async (req, res, next) => {
   try {
     if (req.user) {
+      const {id} = req.user
       const ingredArray = await Ingredient.findAll({
         where: {
           text: {
             [Op.iLike]: `%${req.params.word}%`
           }
         },
-        include: [{ model: Article, as: "article"}],
+        include: [
+          {
+            model: Article,
+            as: "article",
+            include: [
+              {
+                model: User,
+                where: {
+                  userId: id
+                }
+              }
+            ]
+          }
+        ]
       });
-      const articles = ingredArray.map(ingred => ingred.article);
+      let articles = ingredArray.map(ingred => {
+        console.log(ingred)
+        return ingred.article
+      });
+      const articlesByTitle = await Article.findAll({
+        where: {
+          title: {
+            [Op.iLike]: `%${req.params.word}%`
+          }
+        }
+      });
+      articles = articles.concat(articlesByTitle);
       let uniqueArticle = {};
       let filteredArticles = [];
       articles.forEach(article => {

@@ -43,7 +43,7 @@ export const createNewArticle = url => async dispatch => {
 
 export const fetchArticlesByIngredient = text => async dispatch => {
   try {
-    const { data } = await axios.get(`/api/articles/ingredients/${text}`);
+    const { data } = await axios.get(`/api/articles/search/${text}`);
     dispatch(getAllArticles(data));
   } catch (err) {
     console.log(err);
