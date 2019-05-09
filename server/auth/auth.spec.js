@@ -4,33 +4,33 @@ const { expect } = require('chai');
 const db = require('../db');
 const app = require('../');
 
+before(() => db.sync({ force: true }));
+
 describe('User created using the /signup route', () => {
   let authenticatedSession = null;
 
   beforeEach('Returns a user created using the API', done => {
-    db.sync({ force: true }).then(() => {
-      let session = request(app);
-      session
-        .post('/auth/signup')
-        .send({
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'johndoe@gmail.com',
-          password: '12345',
-        })
-        .expect(200)
-        .then(res => {
-          const resJSON = JSON.parse(res.text);
-          expect(resJSON.firstName).to.equal('John');
-          expect(resJSON.lastName).to.equal('Doe');
-          expect(resJSON.email).to.equal('johndoe@gmail.com');
-          authenticatedSession = session;
-          return done();
-        })
-        .catch(err => {
-          return done(err);
-        });
-    });
+    let session = request(app);
+    session
+      .post('/auth/signup')
+      .send({
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'johnsmith@gmail.com',
+        password: '12345',
+      })
+      .expect(200)
+      .then(res => {
+        const resJSON = JSON.parse(res.text);
+        expect(resJSON.firstName).to.equal('John');
+        expect(resJSON.lastName).to.equal('Smith');
+        expect(resJSON.email).to.equal('johnsmith@gmail.com');
+        authenticatedSession = session;
+        return done();
+      })
+      .catch(err => {
+        return done(err);
+      });
   });
 
   it('Returns a status indicating the user is logged in', done => {
@@ -40,8 +40,8 @@ describe('User created using the /signup route', () => {
       .then(res => {
         const resJSON = JSON.parse(res.text);
         expect(resJSON.firstName).to.equal('John');
-        expect(resJSON.lastName).to.equal('Doe');
-        expect(resJSON.email).to.equal('johndoe@gmail.com');
+        expect(resJSON.lastName).to.equal('Smith');
+        expect(resJSON.email).to.equal('johnsmith@gmail.com');
         return done();
       })
       .catch(err => {
@@ -73,7 +73,7 @@ describe('Logging in a user', () => {
     loggedInSession
       .post('/auth/login')
       .send({
-        email: 'johndoe@gmail.com',
+        email: 'johnsmith@gmail.com',
         password: '12345',
       })
       .expect(200)
@@ -83,7 +83,7 @@ describe('Logging in a user', () => {
         }
         const resJSON = JSON.parse(res.text);
         expect(resJSON.firstName).to.equal('John');
-        expect(resJSON.lastName).to.equal('Doe');
+        expect(resJSON.lastName).to.equal('Smith');
         return done();
       });
   });
@@ -93,7 +93,7 @@ describe('Logging in a user', () => {
     failSession
       .post('/auth/login')
       .send({
-        email: 'johndoe@gmail.com',
+        email: 'johnsmith@gmail.com',
         password: '123456',
       })
       .expect(401)
