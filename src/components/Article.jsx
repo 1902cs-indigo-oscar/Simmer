@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchSingleArticle } from "../store";
+import {
+  fetchSingleArticle,
+  addArticleToUser,
+  removeArticleFromUser
+} from "../store";
 
 class Article extends Component {
   componentDidMount() {
@@ -8,10 +12,25 @@ class Article extends Component {
   }
 
   render() {
-    const { article } = this.props;
+    const { article, bookmarkArticle, removeBookmark } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div>
+          {article.users && article.users.length ? (
+            <button
+              className="button is-danger is-large"
+              onClick={evt => removeBookmark(evt, article)}
+            >
+              X
+            </button>
+          ) : (
+            <button
+              className="button is-info is-large"
+              onClick={evt => bookmarkArticle(evt, article.url)}
+            >
+              +
+            </button>
+          )}
           <h1 className="title is-2">{article.title}</h1>
           <h6 className="title is-5">{article.author}</h6>
           <a href={article.url} className="title is-4 has-text-link is-italic">
@@ -27,7 +46,9 @@ class Article extends Component {
             <ul>
               {article.ingredients &&
                 article.ingredients.map((ingredient, index) => (
-                  <li key={index}>{">"} {ingredient.text} {"<"}</li>
+                  <li key={index}>
+                    {">"} {ingredient.text} {"<"}
+                  </li>
                 ))}
             </ul>
           </div>
@@ -110,7 +131,9 @@ const mapState = state => ({
 const mapDispatch = dispatch => ({
   loadSingleArticle: id => {
     dispatch(fetchSingleArticle(id));
-  }
+  },
+  bookmarkArticle: (evt, url) => dispatch(addArticleToUser(url)),
+  removeBookmark: (evt, article) => dispatch(removeArticleFromUser(article))
 });
 
 export default connect(

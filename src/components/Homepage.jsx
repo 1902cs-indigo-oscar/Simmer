@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { createNewArticle, fetchAllArticles, clearArticles, removeArticleFromUser } from "../store";
-import {ArticleList} from './ArticleList'
+import {
+  createNewArticle,
+  fetchAllArticles,
+  clearArticles,
+  removeArticleFromUser
+} from "../store";
+import { ArticleList } from "./ArticleList";
 
 class Homepage extends Component {
   componentDidMount() {
@@ -13,13 +18,36 @@ class Homepage extends Component {
   }
 
   render() {
-    const { articles, createNewArticle, removeBookmark, user, history } = this.props;
+    const {
+      articles,
+      createNewArticle,
+      removeBookmark,
+      user,
+      history
+    } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
+        <div className="has-text-centered bookmark-container">
+          <p>
+            <a href="https://chrome.google.com/webstore/detail/simmer/gkmhaemjffpnaecgoknkkoofcboagojl?hl=en">
+              Download the Chrome Extension
+            </a>{" "}
+            or enter the URL for a recipe here:{" "}
+          </p>
+          <form action="submit" name="article" onSubmit={createNewArticle}>
+            <input type="text" name="article" />
+            <button type="submit">Add Article</button>
+          </form>
+        </div>
+        <br />
         <div>
           <h1 className="title is-2">{user.firstName}'s Articles</h1>
           {articles.length ? (
-            <ArticleList articles={articles} history={history} removeBookmark={removeBookmark}/>
+            <ArticleList
+              articles={articles}
+              history={history}
+              removeBookmark={removeBookmark}
+            />
           ) : (
             <p className="has-text-danger">
               It looks like you don't have any recipes saved.
@@ -28,17 +56,13 @@ class Homepage extends Component {
             </p>
           )}
           <br />
-          <form action="submit" name="article" onSubmit={createNewArticle}>
-            <input type="text" name="article" />
-            <button type="submit">Add Article</button>
-          </form>
         </div>
         <style jsx="">{`
           * {
             font-family: "Aclonica", sans-serif;
           }
           .all-articles-container {
-            margin: 3em;
+            margin: 1em 3em;
           }
           img {
             object-fit: cover;

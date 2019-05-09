@@ -25,6 +25,9 @@ const epicuriousScraper = (url) => {
       }).text().trim().split(/\s\s+/);
       article.misc = times.concat(nutrition)
       article.imageUrl = $("picture > source", html).attr("srcset");
+      article.tags = $(".tags dt", html).each(function () {
+        $(this).append("**");
+      }).text().split('**');
       return article;
     })
     .catch(function (err) {

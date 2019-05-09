@@ -41,19 +41,6 @@ router.post("/", async (req, res, next) => {
       let urlTail = req.body.url.split("www.")[1];
       const urlBase = urlTail.split(".com")[0];
       const newArticle = await scraperObj[urlBase](req.body.url);
-      // const newArticle = {
-      //   url: req.body.url,
-      //   site: req.body.site,
-      //   title: req.body.title,
-      //   author: req.body.author,
-      //   ingredients: req.body.ingredients,
-      //   instructions: req.body.instructions,
-      //   imageUrl: req.body.imageUrl,
-      //   tags: req.body.tags,
-      //   misc: req.body.misc,
-      //   userId: req.user.id,
-      // };
-      // const createdArticle = await Article.create(newArticle);
       let createdArticle = await Article.findOne({
         where: {
           url: req.body.url
@@ -99,7 +86,7 @@ router.post("/", async (req, res, next) => {
       //   createdArticle.addKeyword(newKeyword[0].dataValues.id);
       // });
       //END GOOGLE API BLOCK
-      res.json(createdArticle);
+      res.status(204).json(createdArticle);
     } else {
       res.sendStatus(404);
     }
@@ -112,9 +99,19 @@ router.get("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
       const id = Number(req.params.articleId);
-      console.log("id in route", id);
       const article = await Article.findByPk(id, {
-        include: [{ model: Ingredient }]
+        include: [
+          { model: Ingredient },
+          {
+            model: User,
+            through: {
+              attributes: ["userId"],
+              where: {
+                userId: req.user.id
+              }
+            }
+          }
+        ]
       });
       res.json(article);
     } else {
@@ -161,21 +158,24 @@ router.post("/scraped", async (req, res, next) => {
       });
       if (existingArticle) {
         await req.user.addArticle(existingArticle);
-        res.sendStatus(204);
+        res.status(204).json(existingArticle);
       } else {
         const newArticle = await Article.create({
           url,
           site,
           title,
           author,
-          ingredients,
           instructions,
           imageUrl,
           tags,
           misc
         });
         await req.user.addArticle(newArticle);
-        res.sendStatus(204);
+        ingredients.forEach(async ingredient => {
+          const newIngred = await Ingredient.create({ text: ingredient });
+          newArticle.addIngredient(newIngred.id);
+        });
+        res.status(204).json(newArticle);
       }
     } catch (err) {
       next(err);
