@@ -188,7 +188,7 @@ router.post("/scraped", async (req, res, next) => {
 router.get("/search/:word", async (req, res, next) => {
   try {
     if (req.user) {
-      const {id} = req.user
+      const { id } = req.user;
       const ingredArray = await Ingredient.findAll({
         where: {
           text: {
@@ -202,21 +202,37 @@ router.get("/search/:word", async (req, res, next) => {
             include: [
               {
                 model: User,
+                through: {
+                  attributes: ["userId"],
+                  where: {
+                    userId: id
+                  }
+                }
               }
             ]
           }
         ]
       });
       let articles = ingredArray.map(ingred => {
-        console.log(ingred)
-        return ingred.article
+        return ingred.article;
       });
       const articlesByTitle = await Article.findAll({
         where: {
           title: {
             [Op.iLike]: `%${req.params.word}%`
           }
-        }
+        },
+        include: [
+          {
+            model: User,
+            through: {
+              attributes: ["userId"],
+              where: {
+                userId: id
+              }
+            }
+          }
+        ]
       });
       articles = articles.concat(articlesByTitle);
       let uniqueArticle = {};
