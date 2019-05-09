@@ -1,17 +1,21 @@
-const request = require('supertest');
-const {expect} = require('chai')
+const request = require('supertest-session');
+const { expect } = require('chai');
 
-const db = require("../../server/db");
-const {User} = require("../../server/db/models")
-const app = require("../../server")
+const db = require('../../server/db');
+const app = require('../../server');
 
-beforeEach(async () => {
-  await db.sync({ force: true });
-  const newUserInfo = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'johndoe@gmail.com',
-    password: '12345',
-  }
-  await User.create(newUserInfo)
+describe('Retrieving articles for a guest user', done => {
+  it('should return a 401', done => {
+    let guestSession = request(app);
+    guestSession
+      .get('/api/articles')
+      .expect(401)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        expect(res.text).to.equal('Unauthorized');
+        return done();
+      });
+  });
 });
