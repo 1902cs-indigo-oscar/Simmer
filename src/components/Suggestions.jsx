@@ -1,22 +1,31 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { createNewArticle, fetchAllArticles, clearArticles } from "../store";
+import { fetchArticlesByIngredient, clearArticles } from "../store";
 
 class Homepage extends Component {
-  componentDidMount() {
-    this.props.loadAllArticles();
-  }
-
-  componentWillUnmount() {
-    this.props.clearLoadedArticles();
-  }
+componentWillUnmount(){
+  this.props.clearLoadedArticles()
+}
 
   render() {
-    const { articles, createNewArticle, user } = this.props;
+    const { articles, loadArticlesByText } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div>
-          <h1 className="title is-2">{user.firstName}'s Articles</h1>
+          <h1 className="title is-2">
+            Have an ingredient?
+            <br />
+            Enter it to find recipes!
+          </h1>
+          <form
+            action="submit"
+            name="ingredient"
+            onSubmit={evt => loadArticlesByText(evt)}
+          >
+            <input type="text" name="ingredient" />
+            <button type="submit">Find By Ingredient</button>
+          </form>
+          <br />
           {articles.length ? (
             <div className="columns is-centered is-multiline">
               {articles.map(article => (
@@ -46,16 +55,9 @@ class Homepage extends Component {
             </div>
           ) : (
             <p className="has-text-danger">
-              It looks like you don't have any recipes saved.
-              <br />
-              Start bookmarking some pages!
+              Enter an ingredient above to find recipes!
             </p>
           )}
-          <br />
-          <form action="submit" name="article" onSubmit={createNewArticle}>
-            <input type="text" name="article" />
-            <button type="submit">Add Article</button>
-          </form>
         </div>
         <style jsx="">{`
           * {
@@ -79,14 +81,11 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => ({
-  createNewArticle: evt => {
+  loadArticlesByText: evt => {
     evt.preventDefault();
-    const url = evt.target.article.value;
-    dispatch(createNewArticle(url));
-    evt.target.article.value = "";
-  },
-  loadAllArticles: () => {
-    dispatch(fetchAllArticles());
+    const text = evt.target.ingredient.value;
+    dispatch(fetchArticlesByIngredient(text));
+    evt.target.ingredient.value = ""
   },
   clearLoadedArticles: () => dispatch(clearArticles())
 });

@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout } from '../store';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "../store";
 
 class Navbar extends Component {
   state = {
-    isActive: false,
+    isActive: false
   };
 
   handleMobileClick = event => {
@@ -30,7 +30,7 @@ class Navbar extends Component {
             Simmer
           </Link>
           <a
-            className={`navbar-burger burger ${isActive ? 'is-active' : ''}`}
+            className={`navbar-burger burger ${isActive ? "is-active" : ""}`}
             aria-label="menu"
             aria-expanded="false"
             role="button"
@@ -44,10 +44,16 @@ class Navbar extends Component {
         </div>
         <div
           id="navbarMenu"
-          className={`navbar-menu ${isActive ? 'is-active' : ''}`}
+          className={`navbar-menu ${isActive ? "is-active" : ""}`}
         >
           {isLoggedIn ? (
             <div className="navbar-end">
+              <Link className="navbar-item has-text-danger" to="/home">
+                Home
+              </Link>
+              <Link className="navbar-item has-text-danger" to="/suggestions">
+                Suggestions
+              </Link>
               <Link
                 className="navbar-item has-text-danger"
                 to="/"
@@ -78,13 +84,13 @@ class Navbar extends Component {
 }
 
 const mapState = state => ({
-  isLoggedIn: !!state.user.id,
+  isLoggedIn: !!state.user.id
 });
 
 const mapDispatch = dispatch => ({
   handleClick() {
     dispatch(logout());
-  },
+  }
 });
 
 export default connect(
