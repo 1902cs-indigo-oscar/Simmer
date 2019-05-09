@@ -15,7 +15,6 @@ savePageButton.addEventListener('click', function (event) {
   event.preventDefault()
   scraper[site](url).then(
     article => {
-      console.log(article);
       fetch('https://simmer.brook.li/api/articles/scraped', {
         method: 'POST',
         mode: 'cors',

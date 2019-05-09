@@ -25,7 +25,6 @@ const epicuriousScraper = (url) => {
         $(this).append("**");
       }).text().split('**');
       article.tags.pop();
-      console.log(article);
       return article;
     })
 }
