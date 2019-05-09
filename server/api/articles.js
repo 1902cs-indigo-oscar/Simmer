@@ -202,9 +202,6 @@ router.get("/search/:word", async (req, res, next) => {
             include: [
               {
                 model: User,
-                where: {
-                  userId: id
-                }
               }
             ]
           }

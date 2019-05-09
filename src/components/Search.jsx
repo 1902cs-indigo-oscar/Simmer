@@ -9,7 +9,7 @@ class Search extends Component {
   }
 
   render() {
-    const { articles, loadArticlesByText } = this.props;
+    const { articles, loadArticlesByText, history } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div>
@@ -28,7 +28,7 @@ class Search extends Component {
           </form>
           <br />
           {articles.length ? (
-            <ArticleList articles={articles} />
+            <ArticleList articles={articles} history={history} />
           ) : (
             <p className="has-text-danger">
               Enter an ingredient above to find recipes!

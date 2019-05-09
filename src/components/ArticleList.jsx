@@ -1,13 +1,13 @@
 import React from "react";
 
-export const ArticleList = ({ articles }) => {
+export const ArticleList = ({ articles, history }) => {
   return (
     <div className="columns is-centered is-multiline">
       {articles.map(article => (
         <div key={article.id} className="column is-one-third">
           <div
             className="card"
-            onClick={() => this.props.history.push(`/articles/${article.id}`)}
+            onClick={() => history.push(`/articles/${article.id}`)}
           >
             <header className="card-header">
               <p className="card-header-title is-centered is-size-4">

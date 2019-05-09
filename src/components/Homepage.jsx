@@ -13,13 +13,13 @@ class Homepage extends Component {
   }
 
   render() {
-    const { articles, createNewArticle, user } = this.props;
+    const { articles, createNewArticle, user, history } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div>
           <h1 className="title is-2">{user.firstName}'s Articles</h1>
           {articles.length ? (
-            <ArticleList articles={articles}/>
+            <ArticleList articles={articles} history={history}/>
           ) : (
             <p className="has-text-danger">
               It looks like you don't have any recipes saved.
