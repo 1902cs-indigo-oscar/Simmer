@@ -3,6 +3,7 @@ import axios from "axios";
 const GET_ALL_ARTICLES = "GET_ALL_ARTICLES";
 const GET_SINGLE_ARTICLE = "GET_SINGLE_ARTICLE";
 const ADD_ARTICLE = "ADD_ARTICLE";
+const REMOVE_ARTICLE = "REMOVE_ARTICLE";
 
 const initialState = {
   all: [],
@@ -12,6 +13,7 @@ const initialState = {
 const getAllArticles = articles => ({ type: GET_ALL_ARTICLES, articles });
 const getSingleArticle = article => ({ type: GET_SINGLE_ARTICLE, article });
 const addArticle = article => ({ type: ADD_ARTICLE, article });
+const removeArticle = article => ({ type: REMOVE_ARTICLE, article });
 
 export const fetchAllArticles = () => async dispatch => {
   try {
@@ -41,14 +43,32 @@ export const createNewArticle = url => async dispatch => {
   }
 };
 
+export const addArticleToUser = url => async dispatch => {
+  try {
+    const { data } = await axios.post("/api/articles/", { url });
+    dispatch(removeArticle(data));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const fetchArticlesByIngredient = text => async dispatch => {
   try {
     const { data } = await axios.get(`/api/articles/search/${text}`);
     dispatch(getAllArticles(data));
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
+
+export const removeArticleFromUser = article => async dispatch => {
+  try {
+    await axios.delete(`/api/articles/${article.id}`)
+    dispatch(removeArticle(article))
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 export const clearArticles = () => dispatch => {
   dispatch(getAllArticles([]));
@@ -62,6 +82,11 @@ export default function(state = initialState, action) {
       return { ...state, single: action.article };
     case ADD_ARTICLE:
       return { ...state, all: [...state.all, action.article] };
+    case REMOVE_ARTICLE:
+      return {
+        ...state,
+        all: state.all.filter(article => article.id !== action.article.id)
+      };
     default:
       return state;
   }

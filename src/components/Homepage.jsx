@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { createNewArticle, fetchAllArticles, clearArticles } from "../store";
+import { createNewArticle, fetchAllArticles, clearArticles, removeArticleFromUser } from "../store";
 import {ArticleList} from './ArticleList'
 
 class Homepage extends Component {
@@ -13,13 +13,13 @@ class Homepage extends Component {
   }
 
   render() {
-    const { articles, createNewArticle, user, history } = this.props;
+    const { articles, createNewArticle, removeBookmark, user, history } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div>
           <h1 className="title is-2">{user.firstName}'s Articles</h1>
           {articles.length ? (
-            <ArticleList articles={articles} history={history}/>
+            <ArticleList articles={articles} history={history} removeBookmark={removeBookmark}/>
           ) : (
             <p className="has-text-danger">
               It looks like you don't have any recipes saved.
@@ -64,7 +64,8 @@ const mapDispatch = dispatch => ({
   loadAllArticles: () => {
     dispatch(fetchAllArticles());
   },
-  clearLoadedArticles: () => dispatch(clearArticles())
+  clearLoadedArticles: () => dispatch(clearArticles()),
+  removeBookmark: article => dispatch(removeArticleFromUser(article))
 });
 
 export default connect(

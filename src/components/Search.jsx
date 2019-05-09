@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchArticlesByIngredient, clearArticles } from "../store";
+import {
+  fetchArticlesByIngredient,
+  clearArticles,
+  addArticleToUser,
+  removeArticleFromUser
+} from "../store";
 import { ArticleList } from "./ArticleList";
 
 class Search extends Component {
@@ -9,7 +14,14 @@ class Search extends Component {
   }
 
   render() {
-    const { articles, loadArticlesByText, history } = this.props;
+    const {
+      articles,
+      loadArticlesByText,
+      bookmarkArticle,
+      removeBookmark,
+      history,
+      user
+    } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div>
@@ -28,7 +40,13 @@ class Search extends Component {
           </form>
           <br />
           {articles.length ? (
-            <ArticleList articles={articles} history={history} />
+            <ArticleList
+              articles={articles}
+              history={history}
+              user={user}
+              bookmarkArticle={bookmarkArticle}
+              removeBookmark={removeBookmark}
+            />
           ) : (
             <p className="has-text-danger">
               Enter an ingredient above to find recipes!
@@ -63,7 +81,9 @@ const mapDispatch = dispatch => ({
     dispatch(fetchArticlesByIngredient(text));
     evt.target.ingredient.value = "";
   },
-  clearLoadedArticles: () => dispatch(clearArticles())
+  clearLoadedArticles: () => dispatch(clearArticles()),
+  bookmarkArticle: url => dispatch(addArticleToUser(url)),
+  removeBookmark: article => dispatch(removeArticleFromUser(article))
 });
 
 export default connect(
