@@ -19,3 +19,40 @@ describe('Retrieving articles for a guest user', done => {
       });
   });
 });
+
+describe('A logged in user', () => {
+  let authenticatedSession = null;
+
+  before('Logs in user', done => {
+    db.sync().then(() => {
+      let session = request(app);
+      session
+        .post('/auth/login')
+        .send({
+          email: 'johndoe@gmail.com',
+          password: '12345',
+        })
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          authenticatedSession = session;
+          return done();
+        });
+    });
+  });
+
+  it('should not initially be associated with any articles', done => {
+    authenticatedSession
+      .get('/api/articles/')
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        expect(res.body).to.deep.equal([]);
+        return done();
+      });
+  });
+});
