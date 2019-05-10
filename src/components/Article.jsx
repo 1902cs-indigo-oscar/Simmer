@@ -83,9 +83,6 @@ class Article extends Component {
           </div>
         </div>
         <style jsx="">{`
-          * {
-            font-family: "Aclonica", sans-serif;
-          }
           .all-articles-container {
             margin: 3em;
           }

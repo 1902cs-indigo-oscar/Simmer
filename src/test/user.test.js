@@ -1,9 +1,9 @@
 const User = require('../../server/db/models/user');
 const db = require('../../server/db');
 
-beforeEach(async () => await db.sync({ force: true }));
+beforeEach(() => db.sync({ force: true }));
 
-describe.only('User Model', () => {
+describe('User Model', () => {
   let newUser;
   let newUserInfo = {
     firstName: 'John',
@@ -45,6 +45,4 @@ describe.only('User Model', () => {
       expect(newUser.correctPassword('123456')).toEqual(false);
     });
   });
-
-  // describe('should not create a user', () => {});
 });

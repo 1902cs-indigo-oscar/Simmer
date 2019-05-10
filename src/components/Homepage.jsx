@@ -43,9 +43,6 @@ class Homepage extends Component {
           </form>
         </div>
         <style jsx="">{`
-          * {
-            font-family: "Aclonica", sans-serif;
-          }
           .all-articles-container {
             margin: 3em;
           }

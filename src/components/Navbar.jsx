@@ -67,11 +67,6 @@ class Navbar extends Component {
             </div>
           )}
         </div>
-        <style jsx="">{`
-          * {
-            font-family: "Aclonica", sans-serif;
-          }
-        `}</style>
       </nav>
     );
   }

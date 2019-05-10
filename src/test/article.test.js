@@ -2,9 +2,7 @@ const Article = require("../../server/db/models/article");
 const { foodnetwork } = require("../../server/scraping");
 const db = require("../../server/db");
 
-beforeEach(() => {
-  return db.sync({ force: true });
-});
+beforeEach(() => db.sync({ force: true }));
 
 describe("Article Model", () => {
   let articleTest;
