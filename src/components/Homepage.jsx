@@ -5,7 +5,8 @@ import {
   fetchAllArticles,
   clearArticles,
   addArticleToUser,
-  removeArticleFromUser
+  removeArticleFromUser,
+  changeOpacity
 } from "../store";
 import { ArticleList } from "./ArticleList";
 
@@ -111,6 +112,9 @@ const mapDispatch = dispatch => ({
     const url = evt.target.article.value;
     dispatch(createNewArticle(url));
     evt.target.article.value = "";
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 2000);
   },
   loadAllArticles: () => {
     dispatch(fetchAllArticles());
