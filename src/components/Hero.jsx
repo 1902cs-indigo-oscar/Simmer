@@ -12,11 +12,6 @@ const Hero = () => (
         </Link>
       </div>
     </div>
-    <style jsx="">{`
-      * {
-        font-family: "Aclonica", sans-serif;
-      }
-    `}</style>
   </section>
 );
 

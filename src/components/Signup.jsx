@@ -63,45 +63,38 @@ class Signup extends Component {
     const { fields } = this.state;
     const { name, handleSubmit, error } = this.props;
     return (
-      <div>
-        <section className="hero is-fullheight-with-navbar has-background-primary has-text-centered">
-          <div className="hero-body">
-            <div className="container">
-              <h1 className="title has-text-weight-semibold">Sign Up</h1>
-              <div className="columns is-centered">
-                <div className="column is-half">
-                  <form className="" onSubmit={handleSubmit} name={name}>
-                    {fields.map(({ name, label, inputType, fasType }, i) => {
-                      return this.renderInputFields(
-                        name,
-                        label,
-                        inputType,
-                        fasType,
-                        i
-                      );
-                    })}
-                    <br />
-                    <button className="button is-danger" type="submit">
-                      Submit
-                    </button>
-                    {error && error.response && (
-                      <div>
-                        <br />
-                        Please enter all fields with valid information.
-                      </div>
-                    )}
-                  </form>
-                </div>
+      <section className="hero is-fullheight-with-navbar has-background-primary has-text-centered">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title has-text-weight-semibold">Sign Up</h1>
+            <div className="columns is-centered">
+              <div className="column is-half">
+                <form className="" onSubmit={handleSubmit} name={name}>
+                  {fields.map(({ name, label, inputType, fasType }, i) => {
+                    return this.renderInputFields(
+                      name,
+                      label,
+                      inputType,
+                      fasType,
+                      i
+                    );
+                  })}
+                  <br />
+                  <button className="button is-danger" type="submit">
+                    Submit
+                  </button>
+                  {error && error.response && (
+                    <div>
+                      <br />
+                      Please enter all fields with valid information.
+                    </div>
+                  )}
+                </form>
               </div>
             </div>
           </div>
-        </section>
-        <style jsx="">{`
-          * {
-            font-family: "Aclonica", sans-serif;
-          }
-        `}</style>
-      </div>
+        </div>
+      </section>
     );
   }
 }
