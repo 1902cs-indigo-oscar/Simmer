@@ -4,6 +4,7 @@ import {
   createNewArticle,
   fetchAllArticles,
   clearArticles,
+  addArticleToUser,
   removeArticleFromUser
 } from "../store";
 import { ArticleList } from "./ArticleList";
@@ -21,6 +22,7 @@ class Homepage extends Component {
     const {
       articles,
       createNewArticle,
+      bookmarkArticle,
       removeBookmark,
       user,
       history
@@ -46,6 +48,7 @@ class Homepage extends Component {
             <ArticleList
               articles={articles}
               history={history}
+              bookmarkArticle={bookmarkArticle}
               removeBookmark={removeBookmark}
             />
           ) : (
@@ -89,6 +92,7 @@ const mapDispatch = dispatch => ({
     dispatch(fetchAllArticles());
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
+  bookmarkArticle: url => dispatch(addArticleToUser(url)),
   removeBookmark: article => dispatch(removeArticleFromUser(article))
 });
 

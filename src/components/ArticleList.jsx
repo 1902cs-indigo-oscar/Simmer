@@ -18,7 +18,7 @@ export const ArticleList = ({
               >
                 {article.title}
               </p>
-              {article.users.length ? (
+              {article.users && article.users.length ? (
                 <button
                   className="button is-danger"
                   onClick={() => removeBookmark(article)}

@@ -2,13 +2,19 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
   fetchSingleArticle,
-  addArticleToUser,
-  removeArticleFromUser
+  addArticleToUserSingle,
+  removeArticleFromUserSingle
 } from "../store";
 
 class Article extends Component {
   componentDidMount() {
     this.props.loadSingleArticle(this.props.match.params.id);
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    if (nextProps.users !== this.props.users){
+      return true
+    }
   }
 
   render() {
@@ -125,15 +131,16 @@ class Article extends Component {
 }
 
 const mapState = state => ({
-  article: state.article.single
+  article: state.article.single,
+  users: state.article.single.users
 });
 
 const mapDispatch = dispatch => ({
   loadSingleArticle: id => {
     dispatch(fetchSingleArticle(id));
   },
-  bookmarkArticle: (evt, url) => dispatch(addArticleToUser(url)),
-  removeBookmark: (evt, article) => dispatch(removeArticleFromUser(article))
+  bookmarkArticle: (evt, url) => dispatch(addArticleToUserSingle(url)),
+  removeBookmark: (evt, article) => dispatch(removeArticleFromUserSingle(article))
 });
 
 export default connect(

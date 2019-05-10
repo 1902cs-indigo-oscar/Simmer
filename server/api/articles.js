@@ -38,6 +38,7 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     if (req.user) {
+      console.log(req.body.url);
       let urlTail = req.body.url.split("www.")[1];
       const urlBase = urlTail.split(".com")[0];
       const newArticle = await scraperObj[urlBase](req.body.url);
@@ -49,7 +50,7 @@ router.post("/", async (req, res, next) => {
       if (!createdArticle) {
         createdArticle = await Article.create(newArticle);
       }
-      createdArticle.addUser(req.user.id);
+      await createdArticle.addUser(req.user.id);
       newArticle.ingredients.forEach(async ingredient => {
         const newIngred = await Ingredient.create({ text: ingredient });
         createdArticle.addIngredient(newIngred.id);
@@ -86,7 +87,21 @@ router.post("/", async (req, res, next) => {
       //   createdArticle.addKeyword(newKeyword[0].dataValues.id);
       // });
       //END GOOGLE API BLOCK
-      res.status(204).json(createdArticle);
+      const {id} = createdArticle
+      const finalArticle = await Article.findByPk(id, {
+        include: [
+          {
+            model: User,
+            through: {
+              attributes: ["userId"],
+              where: {
+                userId: req.user.id
+              }
+            }
+          }
+        ]
+      });
+      res.json(finalArticle);
     } else {
       res.sendStatus(404);
     }
@@ -175,7 +190,7 @@ router.post("/scraped", async (req, res, next) => {
           const newIngred = await Ingredient.create({ text: ingredient });
           newArticle.addIngredient(newIngred.id);
         });
-        res.status(204).json(newArticle);
+        res.json(newArticle);
       }
     } catch (err) {
       next(err);
