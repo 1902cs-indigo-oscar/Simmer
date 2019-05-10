@@ -1,17 +1,42 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchSingleArticle } from "../store";
+import {
+  fetchSingleArticle,
+  addArticleToUserSingle,
+  removeArticleFromUserSingle
+} from "../store";
 
 class Article extends Component {
   componentDidMount() {
     this.props.loadSingleArticle(this.props.match.params.id);
   }
 
+  shouldComponentUpdate(nextProps, nextState){
+    if (nextProps.users !== this.props.users){
+      return true
+    }
+  }
+
   render() {
-    const { article } = this.props;
+    const { article, bookmarkArticle, removeBookmark } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div>
+          {article.users && article.users.length ? (
+            <button
+              className="button is-danger is-large"
+              onClick={evt => removeBookmark(evt, article)}
+            >
+              X
+            </button>
+          ) : (
+            <button
+              className="button is-info is-large"
+              onClick={evt => bookmarkArticle(evt, article.url)}
+            >
+              +
+            </button>
+          )}
           <h1 className="title is-2">{article.title}</h1>
           <h6 className="title is-5">{article.author}</h6>
           <a href={article.url} className="title is-4 has-text-link is-italic">
@@ -27,7 +52,9 @@ class Article extends Component {
             <ul>
               {article.ingredients &&
                 article.ingredients.map((ingredient, index) => (
-                  <li key={index}>{">"} {ingredient} {"<"}</li>
+                  <li key={index}>
+                    {">"} {ingredient.text} {"<"}
+                  </li>
                 ))}
             </ul>
           </div>
@@ -101,13 +128,16 @@ class Article extends Component {
 }
 
 const mapState = state => ({
-  article: state.article.single
+  article: state.article.single,
+  users: state.article.single.users
 });
 
 const mapDispatch = dispatch => ({
   loadSingleArticle: id => {
     dispatch(fetchSingleArticle(id));
-  }
+  },
+  bookmarkArticle: (evt, url) => dispatch(addArticleToUserSingle(url)),
+  removeBookmark: (evt, article) => dispatch(removeArticleFromUserSingle(article))
 });
 
 export default connect(

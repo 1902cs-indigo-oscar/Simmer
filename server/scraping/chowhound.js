@@ -8,7 +8,7 @@ const chowhoundScraper = url => {
       let article = {
         site: "Chowhound"
       };
-      article.url = url
+      article.url = url;
       article.title = $(".fr_r_info h1", html).text();
       article.ingredients = $(".freyja_box ul", html)
         .text()
@@ -43,9 +43,7 @@ const chowhoundScraper = url => {
             return step;
           }
         });
-      article.author = instructionsAndAuthor
-        .slice(instructionsAndAuthor.length - 1)
-        .toString();
+      article.author = $(".by_line span", html).text();
       article.imageUrl = $(".fr_hdimgov img", html).attr("data-src");
       let tags = $(".freyja_fulltags", html)
         .text()
