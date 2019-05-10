@@ -53,7 +53,6 @@ class Homepage extends Component {
           {articles.length ? (
             <ArticleList
               articles={articles}
-              user={user}
               history={history}
               bookmarkArticle={bookmarkArticle}
               removeBookmark={removeBookmark}
@@ -96,7 +95,7 @@ const mapDispatch = dispatch => ({
     dispatch(fetchAllArticles());
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
-  bookmarkArticle: (url, user) => dispatch(addArticleToUser(url, user)),
+  bookmarkArticle: url => dispatch(addArticleToUser(url)),
   removeBookmark: article => dispatch(removeArticleFromUser(article))
 });
 

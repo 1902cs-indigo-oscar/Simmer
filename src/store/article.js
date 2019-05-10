@@ -16,7 +16,7 @@ const getAllArticles = articles => ({ type: GET_ALL_ARTICLES, articles });
 const getSingleArticle = article => ({ type: GET_SINGLE_ARTICLE, article });
 const addArticle = article => ({ type: ADD_ARTICLE, article });
 const removeArticle = article => ({ type: REMOVE_ARTICLE, article });
-const addUserToArticle = (article, user) => ({type: ADD_USER_TO_ARTICLE, article, user})
+const addUserToArticle = article => ({type: ADD_USER_TO_ARTICLE, article})
 const removeUserFromArticle = article => ({
   type: REMOVE_USER_FROM_ARTICLE,
   article
@@ -124,7 +124,7 @@ export default function(state = initialState, action) {
     return {
       ...state,
       all: state.all.map(article =>
-        article.id === action.article.id ? { ...article, users: [action.user] } : article
+        article.id === action.article.id ? { ...article, users: [article.users] } : article
       )
     };
     default:
