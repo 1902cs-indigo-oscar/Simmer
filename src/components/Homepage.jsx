@@ -33,18 +33,39 @@ class Homepage extends Component {
           <p>
             <a href="https://chrome.google.com/webstore/detail/simmer/gkmhaemjffpnaecgoknkkoofcboagojl?hl=en">
               Download the Chrome Extension
-            </a>{" "}
+            </a>{' '}
             or enter the URL for a recipe here:
           </p>
+          <br />
           <form action="submit" name="article" onSubmit={createNewArticle}>
-            <input type="text" name="article" />
-            <button type="submit">Add Article</button>
+            <div className="columns is-centered">
+              <div className="column is-two-thirds">
+                <div className="field">
+                  <div className="control has-icons-left">
+                    <input
+                      className="input"
+                      type="text"
+                      name="article"
+                      placeholder="Enter your link here"
+                    />
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-link" />
+                    </span>
+                  </div>
+                </div>
+                <button className="button is-success" type="submit">Add Article</button>
+              </div>
+            </div>
           </form>
-          <br/>
+          <br />
           <p>
             We currently accept recipes from the following sites:
             <br />
-            <a href="https://www.allrecipes.com/">All Recipes</a> | <a href="https://www.foodnetwork.com/">Food Network</a> | <a href="https://www.chowhound.com/">ChowHound</a> | <a href="https://www.epicurious.com/">Epicurious</a> | <a href="https://www.simplyrecipes.com/">Simply Recipes</a>
+            <a href="https://www.allrecipes.com/">All Recipes</a> |{' '}
+            <a href="https://www.foodnetwork.com/">Food Network</a> |{' '}
+            <a href="https://www.chowhound.com/">ChowHound</a> |{' '}
+            <a href="https://www.epicurious.com/">Epicurious</a> |{' '}
+            <a href="https://www.simplyrecipes.com/">Simply Recipes</a>
           </p>
         </div>
         <hr />
