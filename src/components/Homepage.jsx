@@ -34,14 +34,20 @@ class Homepage extends Component {
             <a href="https://chrome.google.com/webstore/detail/simmer/gkmhaemjffpnaecgoknkkoofcboagojl?hl=en">
               Download the Chrome Extension
             </a>{" "}
-            or enter the URL for a recipe here:{" "}
+            or enter the URL for a recipe here:
           </p>
           <form action="submit" name="article" onSubmit={createNewArticle}>
             <input type="text" name="article" />
             <button type="submit">Add Article</button>
           </form>
+          <br/>
+          <p>
+            We currently accept recipes from the following sites:
+            <br />
+            <a href="https://www.allrecipes.com/">All Recipes</a> | <a href="https://www.foodnetwork.com/">Food Network</a> | <a href="https://www.chowhound.com/">ChowHound</a> | <a href="https://www.epicurious.com/">Epicurious</a> | <a href="https://www.simplyrecipes.com/">Simply Recipes</a>
+          </p>
         </div>
-        <br />
+        <hr />
         <div>
           <h1 className="title is-2">{user.firstName}'s Articles</h1>
           {articles.length ? (

@@ -38,7 +38,6 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     if (req.user) {
-      console.log(req.body.url);
       let urlTail = req.body.url.split("www.")[1];
       const urlBase = urlTail.split(".com")[0];
       const newArticle = await scraperObj[urlBase](req.body.url);
@@ -87,7 +86,7 @@ router.post("/", async (req, res, next) => {
       //   createdArticle.addKeyword(newKeyword[0].dataValues.id);
       // });
       //END GOOGLE API BLOCK
-      const {id} = createdArticle
+      const { id } = createdArticle;
       const finalArticle = await Article.findByPk(id, {
         include: [
           {
@@ -99,7 +98,7 @@ router.post("/", async (req, res, next) => {
               }
             }
           },
-          {model: Ingredient}
+          { model: Ingredient }
         ]
       });
       res.json(finalArticle);
@@ -167,16 +166,13 @@ router.post("/scraped", async (req, res, next) => {
   } = req.body;
   if (url && site && title && ingredients && instructions) {
     try {
-      const existingArticle = await Article.findOne({
+      let createdArticle = await Article.findOne({
         where: {
-          url
+          url: req.body.url
         }
       });
-      if (existingArticle) {
-        await req.user.addArticle(existingArticle);
-        res.status(204).json(existingArticle);
-      } else {
-        const newArticle = await Article.create({
+      if (!createdArticle) {
+        createdArticle = await Article.create({
           url,
           site,
           title,
@@ -186,13 +182,54 @@ router.post("/scraped", async (req, res, next) => {
           tags,
           misc
         });
-        await req.user.addArticle(newArticle);
         ingredients.forEach(async ingredient => {
           const newIngred = await Ingredient.create({ text: ingredient });
-          newArticle.addIngredient(newIngred.id);
+          createdArticle.addIngredient(newIngred.id);
         });
-        res.json(newArticle);
       }
+      await createdArticle.addUser(req.user.id);
+      const { id } = createdArticle;
+      const finalArticle = await Article.findByPk(id, {
+        include: [
+          {
+            model: User,
+            through: {
+              attributes: ["userId"],
+              where: {
+                userId: req.user.id
+              }
+            }
+          },
+          { model: Ingredient }
+        ]
+      });
+      res.json(finalArticle);
+      // const existingArticle = await Article.findOne({
+      //   where: {
+      //     url
+      //   }
+      // });
+      // if (existingArticle) {
+      //   await req.user.addArticle(existingArticle);
+      //   res.status(204).json(existingArticle);
+      // } else {
+      //   const newArticle = await Article.create({
+      //     url,
+      //     site,
+      //     title,
+      //     author,
+      //     instructions,
+      //     imageUrl,
+      //     tags,
+      //     misc
+      //   });
+      //   await req.user.addArticle(newArticle);
+      //   ingredients.forEach(async ingredient => {
+      //     const newIngred = await Ingredient.create({ text: ingredient });
+      //     newArticle.addIngredient(newIngred.id);
+      //   });
+      //   res.json(newArticle);
+      // }
     } catch (err) {
       next(err);
     }
@@ -234,9 +271,16 @@ router.get("/search/:word", async (req, res, next) => {
       });
       const articlesByTitle = await Article.findAll({
         where: {
-          title: {
-            [Op.iLike]: `%${req.params.word}%`
-          }
+          [Op.or]: [
+            {
+              title: {
+                [Op.iLike]: `%${req.params.word}%`
+              }
+            },
+            { tags: {
+              [Op.overlap]: [req.params.word.toLowerCase()]
+            }}
+          ]
         },
         include: [
           {
