@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { Article, User, Ingredient } = require("../db/models");
 const scraperObj = require("../scraping");
-// const unirest = require("unirest");
 const { Op } = require("sequelize");
 module.exports = router;
 
@@ -54,38 +53,6 @@ router.post("/", async (req, res, next) => {
         });
       }
       await createdArticle.addUser(req.user.id);
-      //BELOW IS USING GOOGLES LANGUAGE API
-      // newArticle.ingredients.forEach(async ingredient => {
-      //   let analysis = await unirest
-      //     .post(
-      //       `https://language.googleapis.com/v1/documents:analyzeSyntax?key=${
-      //         process.env.GOOGLE_LANGUAGE_API
-      //       }`
-      //     )
-      //     .headers({
-      //       "content-type": "application/json"
-      //     })
-      //     .send({
-      //       document: {
-      //         type: "PLAIN_TEXT",
-      //         content: ingredient
-      //       }
-      //     });
-      //   let keywords = [];
-      //   analysis.body.tokens.forEach(word => {
-      //     if (
-      //       ["ROOT", "DOBJ", "POBJ", "AMOD"].includes(word.dependencyEdge.label)
-      //     ) {
-      //       keywords.push(word.text.content.toLowerCase());
-      //     }
-      //   });
-      //   keywords = keywords.join(" ");
-      //   let newKeyword = await Keyword.findOrCreate({
-      //     where: { name: keywords }
-      //   });
-      //   createdArticle.addKeyword(newKeyword[0].dataValues.id);
-      // });
-      //END GOOGLE API BLOCK
       const { id } = createdArticle;
       const finalArticle = await Article.findByPk(id, {
         include: [
@@ -204,6 +171,7 @@ router.post("/scraped", async (req, res, next) => {
         ]
       });
       res.json(finalArticle);
+      // WANT TO MAKE SURE EXTENSION WORKS WITH ABOVE CODE BEFORE REMOVING BELOW
       // const existingArticle = await Article.findOne({
       //   where: {
       //     url
