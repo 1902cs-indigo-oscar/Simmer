@@ -82,7 +82,7 @@ const mapDispatch = dispatch => ({
     evt.target.ingredient.value = "";
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
-  bookmarkArticle: url => dispatch(addArticleToUser(url)),
+  bookmarkArticle: (url, user) => dispatch(addArticleToUser(url, user)),
   removeBookmark: article => dispatch(removeArticleFromUser(article))
 });
 

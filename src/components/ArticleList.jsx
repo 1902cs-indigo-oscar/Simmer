@@ -3,6 +3,7 @@ import React from "react";
 export const ArticleList = ({
   articles,
   history,
+  user,
   bookmarkArticle,
   removeBookmark
 }) => {
@@ -28,7 +29,7 @@ export const ArticleList = ({
               ) : (
                 <button
                   className="button is-info"
-                  onClick={() => bookmarkArticle(article.url)}
+                  onClick={() => bookmarkArticle(article.url, user)}
                 >
                   +
                 </button>
