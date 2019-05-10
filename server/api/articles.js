@@ -49,12 +49,12 @@ router.post("/", async (req, res, next) => {
       });
       if (!createdArticle) {
         createdArticle = await Article.create(newArticle);
+        newArticle.ingredients.forEach(async ingredient => {
+          const newIngred = await Ingredient.create({ text: ingredient });
+          createdArticle.addIngredient(newIngred.id);
+        });
       }
       await createdArticle.addUser(req.user.id);
-      newArticle.ingredients.forEach(async ingredient => {
-        const newIngred = await Ingredient.create({ text: ingredient });
-        createdArticle.addIngredient(newIngred.id);
-      });
       //BELOW IS USING GOOGLES LANGUAGE API
       // newArticle.ingredients.forEach(async ingredient => {
       //   let analysis = await unirest
@@ -98,7 +98,8 @@ router.post("/", async (req, res, next) => {
                 userId: req.user.id
               }
             }
-          }
+          },
+          {model: Ingredient}
         ]
       });
       res.json(finalArticle);
