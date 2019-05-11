@@ -96,6 +96,16 @@ export const removeArticleFromUserSingle = article => async dispatch => {
   }
 };
 
+export const getRecommendations = () => async dispatch => {
+  try {
+    const {data} = await axios.get('/api/articles/recommendations')
+    console.log("data from getRecommendations thunk", data)
+    dispatch(getAllArticles(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export const clearArticles = () => dispatch => {
   dispatch(getAllArticles([]));
 };
