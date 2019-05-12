@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  createNewArticle,
-  fetchAllArticles,
   clearArticles,
   addArticleToUser,
   removeArticleFromUser,
@@ -22,10 +20,8 @@ class Recommendations extends Component {
   render() {
     const {
       articles,
-      createNewArticle,
       bookmarkArticle,
       removeBookmark,
-      user,
       history
     } = this.props;
     return (
