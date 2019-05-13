@@ -54,7 +54,7 @@ class Homepage extends Component {
                     </span>
                   </div>
                 </div>
-                <button className="button is-success" type="submit">Add Article</button>
+                <button className="button is-success" type="submit">Add Recipe</button>
               </div>
             </div>
           </form>
@@ -71,7 +71,7 @@ class Homepage extends Component {
         </div>
         <hr />
         <div>
-          <h1 className="title is-2">{user.firstName}'s Articles</h1>
+          <h1 className="title is-2">{user.firstName}'s Recipes</h1>
           {articles.length ? (
             <ArticleList
               articles={articles}
