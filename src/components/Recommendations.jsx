@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  fetchArticlesByIngredient,
   clearArticles,
   addArticleToUser,
-  removeArticleFromUser
+  removeArticleFromUser,
+  getRecommendations
 } from "../store";
 import { ArticleList } from "./ArticleList";
 
-class Search extends Component {
+class Recommendations extends Component {
+  componentDidMount() {
+    this.props.loadAllArticles();
+  }
+
   componentWillUnmount() {
     this.props.clearLoadedArticles();
   }
@@ -16,7 +20,6 @@ class Search extends Component {
   render() {
     const {
       articles,
-      loadArticlesByText,
       bookmarkArticle,
       removeBookmark,
       history
@@ -24,21 +27,8 @@ class Search extends Component {
     return (
       <div className="all-articles-container has-text-centered">
         <div>
-          <h1 className="title is-2">
-            Have an ingredient?
-            <br />
-            Enter it to find recipes!
-          </h1>
-          <form
-            action="submit"
-            name="ingredient"
-            onSubmit={evt => loadArticlesByText(evt)}
-          >
-            <input type="text" name="ingredient" />
-            <button type="submit">Find By Ingredient</button>
-          </form>
-          <br />
-          {articles.length ? (
+          <h1 className="title is-2">We think you might like the following recipes:</h1>
+          {articles && articles.length ? (
             <ArticleList
               articles={articles}
               history={history}
@@ -47,16 +37,16 @@ class Search extends Component {
             />
           ) : (
             <p className="has-text-danger">
-              Enter an ingredient above to find recipes!
+              Sorry, we're having some trouble finding you recommendations.
+              <br />
+              Bookmark some recipes so we can help find you more!
             </p>
           )}
+          <br />
         </div>
         <style jsx="">{`
-          * {
-            font-family: "Aclonica", sans-serif;
-          }
           .all-articles-container {
-            margin: 3em;
+            margin: 1em 3em;
           }
           img {
             object-fit: cover;
@@ -73,11 +63,8 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => ({
-  loadArticlesByText: evt => {
-    evt.preventDefault();
-    const text = evt.target.ingredient.value;
-    dispatch(fetchArticlesByIngredient(text));
-    evt.target.ingredient.value = "";
+  loadAllArticles: () => {
+    dispatch(getRecommendations());
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
   bookmarkArticle: url => dispatch(addArticleToUser(url)),
@@ -87,4 +74,4 @@ const mapDispatch = dispatch => ({
 export default connect(
   mapState,
   mapDispatch
-)(Search);
+)(Recommendations);
