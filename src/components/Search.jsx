@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   fetchArticlesByIngredient,
   clearArticles,
   addArticleToUser,
-  removeArticleFromUser
-} from "../store";
-import { ArticleList } from "./ArticleList";
+  removeArticleFromUser,
+} from '../store';
+import { ArticleList } from './ArticleList';
 
 class Search extends Component {
   componentWillUnmount() {
@@ -34,8 +34,26 @@ class Search extends Component {
             name="ingredient"
             onSubmit={evt => loadArticlesByText(evt)}
           >
-            <input type="text" name="ingredient" />
-            <button type="submit">Find By Ingredient</button>
+            <div className="columns is-centered">
+              <div className="column is-two-thirds">
+                <div className="field">
+                  <div className="control has-icons-left">
+                    <input
+                      className="input"
+                      type="text"
+                      name="ingredient"
+                      placeholder="Enter an ingredient here"
+                    />
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-cheese" />
+                    </span>
+                  </div>
+                </div>
+                <button className="button is-success" type="submit">
+                  Find Recipes
+                </button>
+              </div>
+            </div>
           </form>
           <br />
           {articles.length ? (
@@ -53,7 +71,7 @@ class Search extends Component {
         </div>
         <style jsx="">{`
           * {
-            font-family: "Aclonica", sans-serif;
+            font-family: 'Aclonica', sans-serif;
           }
           .all-articles-container {
             margin: 3em;
@@ -69,7 +87,7 @@ class Search extends Component {
 
 const mapState = state => ({
   articles: state.article.all,
-  user: state.user
+  user: state.user,
 });
 
 const mapDispatch = dispatch => ({
@@ -77,11 +95,11 @@ const mapDispatch = dispatch => ({
     evt.preventDefault();
     const text = evt.target.ingredient.value;
     dispatch(fetchArticlesByIngredient(text));
-    evt.target.ingredient.value = "";
+    evt.target.ingredient.value = '';
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
   bookmarkArticle: url => dispatch(addArticleToUser(url)),
-  removeBookmark: article => dispatch(removeArticleFromUser(article))
+  removeBookmark: article => dispatch(removeArticleFromUser(article)),
 });
 
 export default connect(

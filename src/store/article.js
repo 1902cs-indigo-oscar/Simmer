@@ -1,4 +1,5 @@
 import axios from "axios";
+import {getError, loadingArticle} from './';
 
 const GET_ALL_ARTICLES = "GET_ALL_ARTICLES";
 const GET_SINGLE_ARTICLE = "GET_SINGLE_ARTICLE";
@@ -43,10 +44,11 @@ export const fetchSingleArticle = id => async dispatch => {
 
 export const createNewArticle = url => async dispatch => {
   try {
-    const { data } = await axios.post("/api/articles/", { url });
-    console.log("data in createNewArticle reducer", data);
-    dispatch(addArticle(data));
+    dispatch(loadingArticle());
+    const res = await axios.post("/api/articles/", { url });
+    dispatch(addArticle(res.data));
   } catch (err) {
+    dispatch(getError(err))
     console.error(err);
   }
 };
