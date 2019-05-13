@@ -5,6 +5,7 @@ import {
   clearArticles,
   addArticleToUser,
   removeArticleFromUser,
+  changeOpacity,
 } from '../store';
 import { ArticleList } from './ArticleList';
 
@@ -19,10 +20,19 @@ class Search extends Component {
       loadArticlesByText,
       bookmarkArticle,
       removeBookmark,
-      history
+      history,
+      errorText,
+      opacity,
     } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
+        <div id="error-message" className="columns is-centered">
+          <div className="column is-two-fifths">
+            <div className="box is-small has-text-centered has-background-info">
+              <p>{errorText}</p>
+            </div>
+          </div>
+        </div>
         <div>
           <h1 className="title is-size-2-desktop">
             Have an ingredient?
@@ -79,6 +89,10 @@ class Search extends Component {
           img {
             object-fit: cover;
           }
+          .box {
+            opacity: ${opacity};
+            transition: 0.5s all;
+          }
         `}</style>
       </div>
     );
@@ -88,6 +102,8 @@ class Search extends Component {
 const mapState = state => ({
   articles: state.article.all,
   user: state.user,
+  errorText: state.message.text,
+  opacity: state.message.opacity,
 });
 
 const mapDispatch = dispatch => ({
@@ -96,6 +112,9 @@ const mapDispatch = dispatch => ({
     const text = evt.target.ingredient.value;
     dispatch(fetchArticlesByIngredient(text));
     evt.target.ingredient.value = '';
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 2000);
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
   bookmarkArticle: url => dispatch(addArticleToUser(url)),
