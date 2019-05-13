@@ -5,6 +5,7 @@ const GET_ALL_ARTICLES = "GET_ALL_ARTICLES";
 const GET_SINGLE_ARTICLE = "GET_SINGLE_ARTICLE";
 const ADD_ARTICLE = "ADD_ARTICLE";
 const REMOVE_ARTICLE = "REMOVE_ARTICLE";
+const ADD_USER_TO_ARTICLE = "ADD_USER_TO_ARTICLE"
 const REMOVE_USER_FROM_ARTICLE = "REMOVE_USER_FROM_ARTICLE";
 
 const initialState = {
@@ -16,6 +17,7 @@ const getAllArticles = articles => ({ type: GET_ALL_ARTICLES, articles });
 const getSingleArticle = article => ({ type: GET_SINGLE_ARTICLE, article });
 const addArticle = article => ({ type: ADD_ARTICLE, article });
 const removeArticle = article => ({ type: REMOVE_ARTICLE, article });
+const addUserToArticle = article => ({type: ADD_USER_TO_ARTICLE, article})
 const removeUserFromArticle = article => ({
   type: REMOVE_USER_FROM_ARTICLE,
   article
@@ -54,7 +56,7 @@ export const createNewArticle = url => async dispatch => {
 export const addArticleToUser = url => async dispatch => {
   try {
     const { data } = await axios.post("/api/articles/", { url });
-    dispatch(removeArticle(data));
+    dispatch(addUserToArticle(data));
   } catch (err) {
     console.error(err);
   }
@@ -96,6 +98,16 @@ export const removeArticleFromUserSingle = article => async dispatch => {
   }
 };
 
+export const getRecommendations = () => async dispatch => {
+  try {
+    const {data} = await axios.get('/api/articles/recommendations')
+    console.log("data from getRecommendations thunk", data)
+    dispatch(getAllArticles(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export const clearArticles = () => dispatch => {
   dispatch(getAllArticles([]));
 };
@@ -111,13 +123,22 @@ export default function(state = initialState, action) {
     case REMOVE_ARTICLE:
       return {
         ...state,
-        all: state.all.filter(article => article.id !== action.article.id)
+        all: state.all.map(article =>
+          article.id === action.article.id ? { ...article, users: [] } : article
+        )
       };
     case REMOVE_USER_FROM_ARTICLE:
       return {
         ...state,
         single: { ...state.single, users: [] }
       };
+    case ADD_USER_TO_ARTICLE:
+    return {
+      ...state,
+      all: state.all.map(article =>
+        article.id === action.article.id ? { ...article, users: [article.users] } : article
+      )
+    };
     default:
       return state;
   }

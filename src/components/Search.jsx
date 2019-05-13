@@ -19,8 +19,7 @@ class Search extends Component {
       loadArticlesByText,
       bookmarkArticle,
       removeBookmark,
-      history,
-      user,
+      history
     } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
@@ -61,7 +60,6 @@ class Search extends Component {
             <ArticleList
               articles={articles}
               history={history}
-              user={user}
               bookmarkArticle={bookmarkArticle}
               removeBookmark={removeBookmark}
             />

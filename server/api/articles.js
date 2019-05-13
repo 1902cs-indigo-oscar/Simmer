@@ -77,6 +77,67 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.get("/recommendations", async (req, res, next) => {
+  try {
+    if (req.user) {
+      const usersArticles = await Article.findAll({
+        include: [
+          {
+            model: User,
+            where: {
+              id: req.user.id
+            }
+          }
+        ]
+      });
+      const usersArticlesId = [];
+      usersArticles.forEach(
+        article => (usersArticlesId[article.id] = article.id)
+      );
+      const linkedUsers = await User.findAll({
+        where: {
+          id: {
+            [Op.ne]: req.user.id
+          }
+        },
+        include: [
+          {
+            model: Article,
+            where: {
+              id: {
+                [Op.in]: usersArticlesId
+              }
+            }
+          }
+        ]
+      });
+      const linkedUsersId = linkedUsers.map(user => user.id);
+      const articles = await Article.findAll({
+        include: [
+          {
+            model: User,
+            where: {
+              id: {
+                [Op.in]: linkedUsersId
+              }
+            },
+          }
+        ]
+      });
+      const recommendations = [];
+      articles.map(article => {
+        if (!usersArticlesId[article.id]) {
+          let updatedArticle = {...article.dataValues, users: []}
+          recommendations.push(updatedArticle);
+        }
+      });
+      res.json(recommendations);
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
@@ -245,9 +306,11 @@ router.get("/search/:word", async (req, res, next) => {
                 [Op.iLike]: `%${req.params.word}%`
               }
             },
-            { tags: {
-              [Op.overlap]: [req.params.word.toLowerCase()]
-            }}
+            {
+              tags: {
+                [Op.overlap]: [req.params.word.toLowerCase()]
+              }
+            }
           ]
         },
         include: [
