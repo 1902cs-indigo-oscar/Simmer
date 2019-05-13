@@ -27,7 +27,7 @@ class Recommendations extends Component {
     return (
       <div className="all-articles-container has-text-centered">
         <div>
-          <h1 className="title is-2">We think you might like the following recipes:</h1>
+          <h1 className="title is-size-2-desktop">We think you might like the following recipes:</h1>
           {articles && articles.length ? (
             <ArticleList
               articles={articles}

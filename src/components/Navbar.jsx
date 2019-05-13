@@ -15,7 +15,7 @@ class Navbar extends Component {
 
   render() {
     const { isActive } = this.state;
-    const { isLoggedIn, handleClick, errorText, opacity } = this.props;
+    const { isLoggedIn, handleClick } = this.props;
     return (
       <div>
         <nav
@@ -55,8 +55,11 @@ class Navbar extends Component {
                 <Link className="navbar-item has-text-danger" to="/search">
                   Search
                 </Link>
-                <Link className="navbar-item has-text-danger" to="/recommendations">
-                Recommendations
+                <Link
+                  className="navbar-item has-text-danger"
+                  to="/recommendations"
+                >
+                  Recommendations
                 </Link>
                 <Link
                   className="navbar-item has-text-danger"
@@ -78,19 +81,6 @@ class Navbar extends Component {
             )}
           </div>
         </nav>
-        <div className="columns is-centered">
-          <div className="column is-two-fifths">
-            <div className="box is-small has-text-centered has-background-info">
-              <p>{errorText}</p>
-            </div>
-          </div>
-        </div>
-        <style jsx="">{`
-          .box {
-            opacity: ${opacity};
-            transition: 0.5s all;
-          }
-          `}</style>
       </div>
     );
   }
@@ -98,8 +88,6 @@ class Navbar extends Component {
 
 const mapState = state => ({
   isLoggedIn: !!state.user.id,
-  errorText: state.message.text,
-  opacity: state.message.opacity
 });
 
 const mapDispatch = dispatch => ({

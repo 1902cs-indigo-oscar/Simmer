@@ -24,7 +24,7 @@ class Search extends Component {
     return (
       <div className="all-articles-container has-text-centered">
         <div>
-          <h1 className="title is-2">
+          <h1 className="title is-size-2-desktop">
             Have an ingredient?
             <br />
             Enter it to find recipes!

@@ -48,6 +48,11 @@ export const ArticleList = ({
           </div>
         </div>
       ))}
+      <style jsx="">{`
+          .button {
+            margin: 1em 0.5em 0 0;
+          }
+        `}</style>
     </div>
   );
 };

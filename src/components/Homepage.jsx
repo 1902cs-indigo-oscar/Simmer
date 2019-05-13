@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   createNewArticle,
   fetchAllArticles,
   clearArticles,
   addArticleToUser,
   removeArticleFromUser,
-  changeOpacity
-} from "../store";
-import { ArticleList } from "./ArticleList";
+  changeOpacity,
+} from '../store';
+import { ArticleList } from './ArticleList';
 
 class Homepage extends Component {
   componentDidMount() {
@@ -26,11 +26,20 @@ class Homepage extends Component {
       bookmarkArticle,
       removeBookmark,
       user,
-      history
+      history,
+      errorText,
+      opacity,
     } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div className="has-text-centered bookmark-container">
+          <div id="error-message" className="columns is-centered">
+            <div className="column is-two-fifths">
+              <div className="box is-small has-text-centered has-background-info">
+                <p>{errorText}</p>
+              </div>
+            </div>
+          </div>
           <p>
             <a href="https://chrome.google.com/webstore/detail/simmer/gkmhaemjffpnaecgoknkkoofcboagojl?hl=en">
               Download the Chrome Extension
@@ -54,7 +63,9 @@ class Homepage extends Component {
                     </span>
                   </div>
                 </div>
-                <button className="button is-success" type="submit">Add Recipe</button>
+                <button className="button is-success" type="submit">
+                  Add Recipe
+                </button>
               </div>
             </div>
           </form>
@@ -95,6 +106,10 @@ class Homepage extends Component {
           img {
             object-fit: cover;
           }
+          .box {
+            opacity: ${opacity};
+            transition: 0.5s all;
+          }
         `}</style>
       </div>
     );
@@ -103,7 +118,9 @@ class Homepage extends Component {
 
 const mapState = state => ({
   articles: state.article.all,
-  user: state.user
+  user: state.user,
+  errorText: state.message.text,
+  opacity: state.message.opacity,
 });
 
 const mapDispatch = dispatch => ({
@@ -111,7 +128,7 @@ const mapDispatch = dispatch => ({
     evt.preventDefault();
     const url = evt.target.article.value;
     dispatch(createNewArticle(url));
-    evt.target.article.value = "";
+    evt.target.article.value = '';
     setTimeout(() => {
       dispatch(changeOpacity());
     }, 2000);
@@ -121,7 +138,7 @@ const mapDispatch = dispatch => ({
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
   bookmarkArticle: url => dispatch(addArticleToUser(url)),
-  removeBookmark: article => dispatch(removeArticleFromUser(article))
+  removeBookmark: article => dispatch(removeArticleFromUser(article)),
 });
 
 export default connect(
