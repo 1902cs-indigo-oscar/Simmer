@@ -36,7 +36,7 @@ class Recommendations extends Component {
               removeBookmark={removeBookmark}
             />
           ) : (
-            <p className="has-text-danger">
+            <p className="has-text-danger is-size-4-desktop">
               Sorry, we're having some trouble finding you recommendations.
               <br />
               Bookmark some recipes so we can help find you more!
@@ -46,7 +46,7 @@ class Recommendations extends Component {
         </div>
         <style jsx="">{`
           .all-articles-container {
-            margin: 1em 3em;
+            margin: 3em;
           }
           img {
             object-fit: cover;

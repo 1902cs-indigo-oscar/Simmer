@@ -52,6 +52,10 @@ export const ArticleList = ({
           .button {
             margin: 1em 0.5em 0 0;
           }
+          img {
+            border: 5px solid rgba(0, 0, 0, 0);
+            border-radius: 15px;
+          }
         `}</style>
     </div>
   );

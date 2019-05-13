@@ -40,7 +40,7 @@ class Homepage extends Component {
               </div>
             </div>
           </div>
-          <p>
+          <p className="is-size-4-desktop">
             <a href="https://chrome.google.com/webstore/detail/simmer/gkmhaemjffpnaecgoknkkoofcboagojl?hl=en">
               Download the Chrome Extension
             </a>{' '}
@@ -63,14 +63,14 @@ class Homepage extends Component {
                     </span>
                   </div>
                 </div>
-                <button className="button is-success" type="submit">
+                <button className="button is-success is-medium" type="submit">
                   Add Recipe
                 </button>
               </div>
             </div>
           </form>
           <br />
-          <p>
+          <p className="is-size-5-desktop">
             We currently accept recipes from the following sites:
             <br />
             <a href="https://www.allrecipes.com/">All Recipes</a> |{' '}
@@ -82,7 +82,7 @@ class Homepage extends Component {
         </div>
         <hr />
         <div>
-          <h1 className="title is-2">{user.firstName}'s Recipes</h1>
+          <h1 className="title is-size-2-desktop">{user.firstName}'s Recipes</h1>
           {articles.length ? (
             <ArticleList
               articles={articles}
@@ -91,7 +91,7 @@ class Homepage extends Component {
               removeBookmark={removeBookmark}
             />
           ) : (
-            <p className="has-text-danger">
+            <p className="has-text-danger is-size-4-desktop">
               It looks like you don't have any recipes saved.
               <br />
               Start bookmarking some pages!
@@ -103,12 +103,15 @@ class Homepage extends Component {
           .all-articles-container {
             margin: 1em 3em;
           }
-          img {
-            object-fit: cover;
-          }
           .box {
             opacity: ${opacity};
             transition: 0.5s all;
+          }
+          img {
+            object-fit: cover;
+          }
+          a:hover {
+            color: red;
           }
         `}</style>
       </div>

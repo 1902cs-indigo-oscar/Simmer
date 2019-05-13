@@ -49,7 +49,7 @@ class Search extends Component {
                     </span>
                   </div>
                 </div>
-                <button className="button is-success" type="submit">
+                <button className="button is-success is-medium" type="submit">
                   Find Recipes
                 </button>
               </div>
@@ -64,7 +64,7 @@ class Search extends Component {
               removeBookmark={removeBookmark}
             />
           ) : (
-            <p className="has-text-danger">
+            <p className="has-text-danger is-size-4-desktop">
               Enter an ingredient above to find recipes!
             </p>
           )}
