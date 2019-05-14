@@ -10,7 +10,7 @@ const allrecipesScraper = url => {
         .text()
         .trim()
         .split(/\s\s+/)
-        .filter(ingred => ingred !== "Add all ingredients to list");
+        .filter(ingred => ingred !== "Add all ingredients to list" && ingred.length);
       let times = $(".prepTime__item", html)
         .text()
         .trim()
@@ -25,7 +25,8 @@ const allrecipesScraper = url => {
       article.instructions = $(".recipe-directions__list > li", html)
         .text()
         .trim()
-        .split(/\s\s+/);
+        .split(/\s\s+/)
+        .filter(instruction => instruction.length)
       article.imageUrl = $(".rec-photo", html).attr("src");
       article.tags = $(".breadcrumbs", html)
         .text()

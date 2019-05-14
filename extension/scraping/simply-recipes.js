@@ -14,7 +14,7 @@ const simplyrecipesScraper = url => {
       .text()
       .trim()
       .split(/\n/)
-      .filter(ingred => ingred.length > 0);
+      .filter(ingred => ingred.length);
     let times = $(".recipe-meta ul", html)
       .each(function () {
         $("li", this).append("**");
@@ -33,7 +33,8 @@ const simplyrecipesScraper = url => {
         } else {
           return step;
         }
-      });
+      })
+      .filter(instruction => instruction.length)
     article.imageUrl = $(".featured-image > img", html).attr("src");
     let tags = $(".primary-terms-container", html)
       .each(function () {

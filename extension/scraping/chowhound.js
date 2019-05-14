@@ -10,7 +10,8 @@ const chowhoundScraper = url => {
       article.ingredients = $(".freyja_box ul", html)
         .text()
         .trim()
-        .split(/\n+/);
+        .split(/\n+/)
+        .filter(ingredient => ingredient.length)
       let info = [];
       info.push($(".frr_serves", html).text());
       info.push($(".frr_difficulty", html).text());
@@ -39,7 +40,8 @@ const chowhoundScraper = url => {
           } else {
             return step;
           }
-        });
+        })
+        .filter(instruction => instruction.length)
       article.author = $(".by_line span", html).text();
       article.imageUrl = $(".fr_hdimgov img", html).attr("data-src");
       let tags = $(".freyja_fulltags", html)
