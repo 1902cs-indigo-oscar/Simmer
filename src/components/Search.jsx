@@ -21,7 +21,7 @@ class Search extends Component {
       bookmarkArticle,
       removeBookmark,
       history,
-      errorText,
+      messageText,
       opacity,
     } = this.props;
     return (
@@ -29,7 +29,7 @@ class Search extends Component {
         <div id="error-message" className="columns is-centered">
           <div className="column is-two-fifths">
             <div className="box is-small has-text-centered has-background-info">
-              <p>{errorText}</p>
+              <p>{messageText}</p>
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@ class Search extends Component {
 const mapState = state => ({
   articles: state.article.all,
   user: state.user,
-  errorText: state.message.text,
+  messageText: state.message.text,
   opacity: state.message.opacity,
 });
 

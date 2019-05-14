@@ -65,6 +65,8 @@ class Login extends Component {
                   <button className="button is-danger" type="submit">
                     Submit
                   </button>
+                  <br />
+                  <br />
                   {error && error.response && (
                     <div> {error.response.data} </div>
                   )}
