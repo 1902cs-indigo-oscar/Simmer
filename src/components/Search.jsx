@@ -5,6 +5,7 @@ import {
   clearArticles,
   addArticleToUser,
   removeArticleFromUser,
+  changeOpacity,
 } from '../store';
 import { ArticleList } from './ArticleList';
 
@@ -19,12 +20,21 @@ class Search extends Component {
       loadArticlesByText,
       bookmarkArticle,
       removeBookmark,
-      history
+      history,
+      errorText,
+      opacity,
     } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
+        <div id="error-message" className="columns is-centered">
+          <div className="column is-two-fifths">
+            <div className="box is-small has-text-centered has-background-info">
+              <p>{errorText}</p>
+            </div>
+          </div>
+        </div>
         <div>
-          <h1 className="title is-2">
+          <h1 className="title is-size-2-desktop">
             Have an ingredient?
             <br />
             Enter it to find recipes!
@@ -49,7 +59,7 @@ class Search extends Component {
                     </span>
                   </div>
                 </div>
-                <button className="button is-success" type="submit">
+                <button className="button is-success is-medium" type="submit">
                   Find Recipes
                 </button>
               </div>
@@ -64,7 +74,7 @@ class Search extends Component {
               removeBookmark={removeBookmark}
             />
           ) : (
-            <p className="has-text-danger">
+            <p className="has-text-danger is-size-4-desktop">
               Enter an ingredient above to find recipes!
             </p>
           )}
@@ -75,6 +85,10 @@ class Search extends Component {
           }
           .all-articles-container {
             margin: 3em;
+          }
+          .box {
+            opacity: ${opacity};
+            transition: 0.5s all;
           }
           img {
             object-fit: cover;
@@ -88,6 +102,8 @@ class Search extends Component {
 const mapState = state => ({
   articles: state.article.all,
   user: state.user,
+  errorText: state.message.text,
+  opacity: state.message.opacity,
 });
 
 const mapDispatch = dispatch => ({
@@ -96,6 +112,9 @@ const mapDispatch = dispatch => ({
     const text = evt.target.ingredient.value;
     dispatch(fetchArticlesByIngredient(text));
     evt.target.ingredient.value = '';
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 1000);
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
   bookmarkArticle: url => dispatch(addArticleToUser(url)),

@@ -4,6 +4,7 @@ const initialState = {
 };
 
 const GOT_ERROR = 'GOT_ERROR ';
+const GOT_SEARCH_ERROR = 'GOT_SEARCH_ERROR';
 const SET_OPACITY = 'SET_OPACITY ';
 const LOAD_ARTICLE = 'LOAD_ARTICLE';
 
@@ -12,6 +13,12 @@ const gotError = err => ({
   err,
   opacity: 1,
 });
+
+const gotSearchError = err => ({
+  type: GOT_SEARCH_ERROR,
+  err,
+  opacity: 1,
+})
 
 const setOpacity = () => ({
   type: SET_OPACITY,
@@ -30,6 +37,12 @@ export const getError = err => dispatch => {
   }
 };
 
+export const getSearchError = err => dispatch => {
+  if (err) {
+    dispatch(gotSearchError('No recipes found with that ingredient...'));
+  }
+}
+
 export const changeOpacity = () => dispatch => {
   dispatch(setOpacity());
 };
@@ -41,6 +54,8 @@ export const loadingArticle = () => dispatch => {
 export default function(state = initialState, action) {
   switch (action.type) {
     case GOT_ERROR:
+      return { ...state, text: action.err, opacity: action.opacity };
+    case GOT_SEARCH_ERROR:
       return { ...state, text: action.err, opacity: action.opacity };
     case SET_OPACITY:
       return { ...state, opacity: action.opacity };
