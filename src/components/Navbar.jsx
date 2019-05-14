@@ -9,6 +9,10 @@ class Navbar extends Component {
     isActive: false,
   };
 
+  handleHomeClick = event => {
+    this.setState({ isActive: false });
+  }
+
   handleMobileClick = event => {
     this.setState({ isActive: !this.state.isActive });
   };
@@ -26,7 +30,7 @@ class Navbar extends Component {
           <div className="navbar-brand">
             <Link
               className="navbar-item is-logo has-text-danger has-text-weight-bold is-size-4"
-              to="/"
+              to="/" onClick={this.handleHomeClick}
             >
               Simmer
             </Link>
@@ -49,15 +53,15 @@ class Navbar extends Component {
           >
             {isLoggedIn ? (
               <div className="navbar-end">
-                <Link className="navbar-item has-text-danger" to="/home">
+                <Link className="navbar-item has-text-danger" to="/home" onClick={this.handleMobileClick}>
                   Home
                 </Link>
-                <Link className="navbar-item has-text-danger" to="/search">
+                <Link className="navbar-item has-text-danger" to="/search" onClick={this.handleMobileClick}>
                   Search
                 </Link>
                 <Link
                   className="navbar-item has-text-danger"
-                  to="/recommendations"
+                  to="/recommendations" onClick={this.handleMobileClick}
                 >
                   Recommendations
                 </Link>
@@ -71,10 +75,10 @@ class Navbar extends Component {
               </div>
             ) : (
               <div className="navbar-end">
-                <Link className="navbar-item has-text-danger" to="/login">
+                <Link className="navbar-item has-text-danger" to="/login" onClick={this.handleMobileClick}>
                   Log In
                 </Link>
-                <Link className="navbar-item has-text-danger" to="/signup">
+                <Link className="navbar-item has-text-danger" to="/signup" onClick={this.handleMobileClick}>
                   Sign Up
                 </Link>
               </div>
