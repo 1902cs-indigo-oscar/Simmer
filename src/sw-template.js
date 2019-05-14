@@ -9,12 +9,12 @@ if ('function' === typeof importScripts) {
     /* injection point for manifest files.  */
     workbox.precaching.precacheAndRoute([]);
 
-/* custom cache rules*/
-workbox.routing.registerNavigationRoute('/index.html', {
+    /* custom cache rules*/
+    workbox.routing.registerNavigationRoute('/index.html', {
       blacklist: [/^\/_/, /\/[^\/]+\.[^\/]+$/],
     });
 
-workbox.routing.registerRoute(
+    workbox.routing.registerRoute(
       /\.(?:png|gif|jpg|jpeg)$/,
       workbox.strategies.cacheFirst({
         cacheName: 'images',
@@ -26,6 +26,16 @@ workbox.routing.registerRoute(
         ],
       })
     );
+
+    workbox.routing.registerRoute(
+      '/auth/me',
+      workbox.strategies.networkFirst()
+    )
+
+    workbox.routing.registerRoute(
+      /\/api\/.+$/,
+      workbox.strategies.networkFirst()
+    )
 
 } else {
     console.log('Workbox could not be loaded. No Offline support');
