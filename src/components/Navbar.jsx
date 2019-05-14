@@ -13,13 +13,18 @@ class Navbar extends Component {
     this.setState({ isActive: false });
   }
 
+  handleLogOut = event => {
+    this.props.handleClick();
+    this.setState({ isActive: false });
+  }
+
   handleMobileClick = event => {
     this.setState({ isActive: !this.state.isActive });
   };
 
   render() {
     const { isActive } = this.state;
-    const { isLoggedIn, handleClick } = this.props;
+    const { isLoggedIn } = this.props;
     return (
       <div>
         <nav
@@ -68,7 +73,7 @@ class Navbar extends Component {
                 <Link
                   className="navbar-item has-text-danger"
                   to="/"
-                  onClick={handleClick}
+                  onClick={this.handleLogOut}
                 >
                   Log Out
                 </Link>
