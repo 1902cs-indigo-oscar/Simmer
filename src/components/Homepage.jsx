@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   createNewArticle,
   fetchAllArticles,
@@ -7,8 +7,10 @@ import {
   addArticleToUser,
   removeArticleFromUser,
   changeOpacity,
-} from '../store';
-import { ArticleList } from './ArticleList';
+  addBookmark,
+  removeBookmark
+} from "../store";
+import { ArticleList } from "./ArticleList";
 
 class Homepage extends Component {
   componentDidMount() {
@@ -28,22 +30,20 @@ class Homepage extends Component {
       user,
       history,
       messageText,
-      opacity,
+      opacity
     } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
         <div className="has-text-centered bookmark-container">
-          <div id="error-message" className="columns is-centered">
-            <div className="column is-two-fifths">
-              <div className="box is-small has-text-centered has-background-info">
-                <p>{messageText}</p>
-              </div>
+          <div id="error-message" className="columns is-centered is-mobile">
+            <div className="column box is-small has-text-centered has-background-info">
+              <p>{messageText}</p>
             </div>
           </div>
           <p className="is-size-4-desktop">
             <a href="https://chrome.google.com/webstore/detail/simmer/gkmhaemjffpnaecgoknkkoofcboagojl?hl=en">
               Download the Chrome Extension
-            </a>{' '}
+            </a>{" "}
             or enter the URL for a recipe here:
           </p>
           <br />
@@ -73,16 +73,18 @@ class Homepage extends Component {
           <p className="is-size-5-desktop">
             We currently accept recipes from the following sites:
             <br />
-            <a href="https://www.allrecipes.com/">All Recipes</a> |{' '}
-            <a href="https://www.foodnetwork.com/">Food Network</a> |{' '}
-            <a href="https://www.chowhound.com/">ChowHound</a> |{' '}
-            <a href="https://www.epicurious.com/">Epicurious</a> |{' '}
+            <a href="https://www.allrecipes.com/">All Recipes</a> |{" "}
+            <a href="https://www.foodnetwork.com/">Food Network</a> |{" "}
+            <a href="https://www.chowhound.com/">ChowHound</a> |{" "}
+            <a href="https://www.epicurious.com/">Epicurious</a> |{" "}
             <a href="https://www.simplyrecipes.com/">Simply Recipes</a>
           </p>
         </div>
         <hr />
         <div>
-          <h1 className="title is-size-2-desktop">{user.firstName}'s Recipes</h1>
+          <h1 className="title is-size-2-desktop">
+            {user.firstName}'s Recipes
+          </h1>
           {articles.length ? (
             <ArticleList
               articles={articles}
@@ -106,6 +108,8 @@ class Homepage extends Component {
           .box {
             opacity: ${opacity};
             transition: 0.5s all;
+            z-index: 2;
+            position: fixed;
           }
           img {
             object-fit: cover;
@@ -123,7 +127,7 @@ const mapState = state => ({
   articles: state.article.all,
   user: state.user,
   messageText: state.message.text,
-  opacity: state.message.opacity,
+  opacity: state.message.opacity
 });
 
 const mapDispatch = dispatch => ({
@@ -131,7 +135,7 @@ const mapDispatch = dispatch => ({
     evt.preventDefault();
     const url = evt.target.article.value;
     dispatch(createNewArticle(url));
-    evt.target.article.value = '';
+    evt.target.article.value = "";
     setTimeout(() => {
       dispatch(changeOpacity());
     }, 1000);
@@ -140,8 +144,20 @@ const mapDispatch = dispatch => ({
     dispatch(fetchAllArticles());
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
-  bookmarkArticle: url => dispatch(addArticleToUser(url)),
-  removeBookmark: article => dispatch(removeArticleFromUser(article)),
+  bookmarkArticle: url => {
+    dispatch(addArticleToUser(url));
+    dispatch(addBookmark());
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 1000);
+  },
+  removeBookmark: article => {
+    dispatch(removeArticleFromUser(article));
+    dispatch(removeBookmark());
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 1000);
+  }
 });
 
 export default connect(

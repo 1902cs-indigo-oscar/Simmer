@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   fetchArticlesByIngredient,
   clearArticles,
   addArticleToUser,
   removeArticleFromUser,
   changeOpacity,
-} from '../store';
-import { ArticleList } from './ArticleList';
+  addBookmark,
+  removeBookmark
+} from "../store";
+import { ArticleList } from "./ArticleList";
 
 class Search extends Component {
   componentWillUnmount() {
@@ -22,15 +24,13 @@ class Search extends Component {
       removeBookmark,
       history,
       messageText,
-      opacity,
+      opacity
     } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
-        <div id="error-message" className="columns is-centered">
-          <div className="column is-two-fifths">
-            <div className="box is-small has-text-centered has-background-info">
-              <p>{messageText}</p>
-            </div>
+        <div id="error-message" className="columns is-centered is-mobile">
+          <div className="column box is-small has-text-centered has-background-info">
+            <p>{messageText}</p>
           </div>
         </div>
         <div>
@@ -81,7 +81,7 @@ class Search extends Component {
         </div>
         <style jsx="">{`
           * {
-            font-family: 'Aclonica', sans-serif;
+            font-family: "Aclonica", sans-serif;
           }
           .all-articles-container {
             margin: 3em;
@@ -89,6 +89,8 @@ class Search extends Component {
           .box {
             opacity: ${opacity};
             transition: 0.5s all;
+            z-index: 2;
+            position: fixed;
           }
           img {
             object-fit: cover;
@@ -103,7 +105,7 @@ const mapState = state => ({
   articles: state.article.all,
   user: state.user,
   messageText: state.message.text,
-  opacity: state.message.opacity,
+  opacity: state.message.opacity
 });
 
 const mapDispatch = dispatch => ({
@@ -111,14 +113,26 @@ const mapDispatch = dispatch => ({
     evt.preventDefault();
     const text = evt.target.ingredient.value;
     dispatch(fetchArticlesByIngredient(text));
-    evt.target.ingredient.value = '';
+    evt.target.ingredient.value = "";
     setTimeout(() => {
       dispatch(changeOpacity());
     }, 1000);
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
-  bookmarkArticle: url => dispatch(addArticleToUser(url)),
-  removeBookmark: article => dispatch(removeArticleFromUser(article)),
+  bookmarkArticle: url => {
+    dispatch(addArticleToUser(url));
+    dispatch(addBookmark());
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 1000);
+  },
+  removeBookmark: article => {
+    dispatch(removeArticleFromUser(article));
+    dispatch(removeBookmark());
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 1000);
+  }
 });
 
 export default connect(
