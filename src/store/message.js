@@ -51,6 +51,14 @@ export const loadingArticle = () => dispatch => {
   dispatch(loadArticle('Loading...'));
 }
 
+export const addBookmark = () => dispatch => {
+  dispatch(loadArticle('Bookmark Added'));
+}
+
+export const removeBookmark = () => dispatch => {
+  dispatch(loadArticle('Bookmark Removed'));
+}
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case GOT_ERROR:
