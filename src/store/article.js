@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getError, loadingArticle } from './';
+import { getError, getSearchError, loadingArticle } from './';
 
 const GET_ALL_ARTICLES = 'GET_ALL_ARTICLES';
 const GET_SINGLE_ARTICLE = 'GET_SINGLE_ARTICLE';
@@ -77,7 +77,7 @@ export const fetchArticlesByIngredient = text => async dispatch => {
     const { data } = await axios.get(`/api/articles/search/${text}`);
     dispatch(getAllArticles(data));
   } catch (err) {
-    dispatch(getError(err));
+    dispatch(getSearchError(err));
     console.error(err);
   }
 };

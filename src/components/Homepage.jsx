@@ -101,7 +101,7 @@ class Homepage extends Component {
         </div>
         <style jsx="">{`
           .all-articles-container {
-            margin: 1em 3em;
+            margin: 3em;
           }
           .box {
             opacity: ${opacity};
@@ -134,7 +134,7 @@ const mapDispatch = dispatch => ({
     evt.target.article.value = '';
     setTimeout(() => {
       dispatch(changeOpacity());
-    }, 2000);
+    }, 1000);
   },
   loadAllArticles: () => {
     dispatch(fetchAllArticles());

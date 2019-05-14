@@ -86,12 +86,12 @@ class Search extends Component {
           .all-articles-container {
             margin: 3em;
           }
-          img {
-            object-fit: cover;
-          }
           .box {
             opacity: ${opacity};
             transition: 0.5s all;
+          }
+          img {
+            object-fit: cover;
           }
         `}</style>
       </div>
@@ -114,7 +114,7 @@ const mapDispatch = dispatch => ({
     evt.target.ingredient.value = '';
     setTimeout(() => {
       dispatch(changeOpacity());
-    }, 2000);
+    }, 1000);
   },
   clearLoadedArticles: () => dispatch(clearArticles()),
   bookmarkArticle: url => dispatch(addArticleToUser(url)),
