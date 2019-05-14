@@ -30,7 +30,9 @@
   "scripts": {
     "seed": "node ./script/seed.js",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npm run build-sw && npm run clean-cra-sw",
+    "build-sw": "node ./src/sw-build.js",
+    "clean-cra-sw": "rm -f build/precache-manifest.*.js && rm -f build/service-worker.js",
     "test": "react-scripts test",
     "test-backend": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" --exit",
     "eject": "react-scripts eject",
@@ -56,6 +58,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "supertest": "^4.0.2",
-    "supertest-session": "^4.0.0"
+    "supertest-session": "^4.0.0",
+    "workbox-build": "^4.3.1"
   }
 }
