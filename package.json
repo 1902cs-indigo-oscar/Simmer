@@ -36,7 +36,8 @@
     "test": "react-scripts test",
     "test-backend": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" --exit",
     "eject": "react-scripts eject",
-    "start-dev": "nodemon server & npm start"
+    "start-dev": "nodemon server & npm start",
+    "start-prod": "nodemon server"
   },
   "eslintConfig": {
     "extends": "react-app"
