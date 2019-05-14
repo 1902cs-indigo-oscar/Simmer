@@ -11,7 +11,8 @@ const foodnetworkScraper = url => {
       article.ingredients = $(".o-Ingredients__m-Body", html)
         .text()
         .trim()
-        .split(/\s\s+/);
+        .split(/\s\s+/)
+        .filter(ingredient => ingredient.length)
       article.misc = $(".o-RecipeInfo", html)
         .text()
         .split(/\s\n+/)
@@ -21,7 +22,8 @@ const foodnetworkScraper = url => {
       article.instructions = $(".o-Method__m-Step", html)
         .text()
         .trim()
-        .split(/\s\s+/);
+        .split(/\s\s+/)
+        .filter(instruction => instruction.length)
       article.imageUrl = $(".m-MediaBlock__m-MediaWrap > img", html).attr(
         "src"
       );
