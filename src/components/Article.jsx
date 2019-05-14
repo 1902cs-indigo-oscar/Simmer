@@ -76,7 +76,7 @@ class Article extends Component {
         <br />
         <div className="columns is-centered">
           <div className="column is-three-fifths is-mobile">
-            <div className="box ingredients">
+            <div className="box information ingredients">
               <h2 className="title is-size-4-mobile">
                 <u>INGREDIENTS:</u>
               </h2>
@@ -94,7 +94,7 @@ class Article extends Component {
         <br />
         <div className="columns">
           <div className="column">
-            <div className="box instructions">
+            <div className="box information instructions">
               <h2 className="title is-size-4-mobile">
                 <u>INSTRUCTIONS:</u>
               </h2>
@@ -114,7 +114,7 @@ class Article extends Component {
         <hr />
         <div className="columns">
           <div className="column is-half">
-            <div className="box tags-list">
+            <div className="box information tags-list">
               <h2 className="title-is-3">
                 <u>TAGS:</u>
               </h2>
@@ -129,7 +129,7 @@ class Article extends Component {
             </div>
           </div>
           <div className="column is-half">
-            <div className="box misc">
+            <div className="box information misc">
               <h2 className="title-is-3">
                 <u>MISCELLANEOUS:</u>
               </h2>
@@ -148,7 +148,7 @@ class Article extends Component {
           .all-articles-container {
             margin: 1em;
           }
-          .box {
+          .information{
             border: 0.1em solid rgba(0, 0, 0, 0.3);
             box-shadow: 0.1em 0.5em 1em 0.5em rgba(0, 0, 0, 0.2);
           }
