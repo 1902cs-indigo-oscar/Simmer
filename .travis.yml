@@ -30,3 +30,8 @@ deploy:
   script: ssh -o "StrictHostKeyChecking no" simmer@simmer.brook.li 'bash ./simmer-deploy-master.sh'
   on:
     branch: master
+  provider: script
+  skip_cleanup: true
+  script: ssh -o "StrictHostKeyChecking no" simmer@simmer.brook.li 'bash ./simmer-deploy-qa.sh'
+  on:
+    branch: qa
