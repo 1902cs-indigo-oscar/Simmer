@@ -1,15 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   clearArticles,
   addArticleToUser,
   removeArticleFromUser,
-  getRecommendations
-} from "../store";
-import { ArticleList } from "./ArticleList";
+  getRecommendations,
+  loadingArticle,
+  changeOpacity
+} from '../store';
+import { ArticleList } from './ArticleList';
 
 class Recommendations extends Component {
   componentDidMount() {
+    this.props.loadingArticleMessage();
     this.props.loadAllArticles();
   }
 
@@ -18,16 +21,20 @@ class Recommendations extends Component {
   }
 
   render() {
-    const {
-      articles,
-      bookmarkArticle,
-      removeBookmark,
-      history
-    } = this.props;
+    const { articles, bookmarkArticle, removeBookmark, history, messageText, opacity } = this.props;
     return (
       <div className="all-articles-container has-text-centered">
+        <div id="error-message" className="columns is-centered">
+          <div className="column is-two-fifths">
+            <div className="box is-small has-text-centered has-background-info">
+              <p>{messageText}</p>
+            </div>
+          </div>
+        </div>
         <div>
-          <h1 className="title is-size-2-desktop">We think you might like the following recipes:</h1>
+          <h1 className="title is-size-2-desktop">
+            We think you might like the following recipes:
+          </h1>
           {articles && articles.length ? (
             <ArticleList
               articles={articles}
@@ -51,6 +58,10 @@ class Recommendations extends Component {
           img {
             object-fit: cover;
           }
+          .box {
+            opacity: ${opacity};
+            transition: 0.5s all;
+          }
         `}</style>
       </div>
     );
@@ -59,16 +70,24 @@ class Recommendations extends Component {
 
 const mapState = state => ({
   articles: state.article.all,
-  user: state.user
+  user: state.user,
+  messageText: state.message.text,
+  opacity: state.message.opacity,
 });
 
 const mapDispatch = dispatch => ({
   loadAllArticles: () => {
     dispatch(getRecommendations());
   },
+  loadingArticleMessage: () => {
+    dispatch(loadingArticle());
+    setTimeout(() => {
+      dispatch(changeOpacity());
+    }, 1000);
+  },
   clearLoadedArticles: () => dispatch(clearArticles()),
   bookmarkArticle: url => dispatch(addArticleToUser(url)),
-  removeBookmark: article => dispatch(removeArticleFromUser(article))
+  removeBookmark: article => dispatch(removeArticleFromUser(article)),
 });
 
 export default connect(

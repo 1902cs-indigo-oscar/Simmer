@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { auth } from '../store';
+import { auth, clearError } from '../store';
 
 class Signup extends Component {
   state = {
@@ -32,7 +32,9 @@ class Signup extends Component {
     ],
   };
 
-  componentWillUnmount() {}
+  componentDidMount() {
+    this.props.resetError();
+  }
 
   renderInputFields(name, label, inputType, fasType, i) {
     return (
@@ -114,6 +116,9 @@ const mapDispatch = (dispatch, ownProps) => ({
     const password = evt.target.password.value;
     const { history } = ownProps;
     dispatch(auth(email, password, formName, firstName, lastName, history));
+  },
+  resetError() {
+    dispatch(clearError());
   },
 });
 

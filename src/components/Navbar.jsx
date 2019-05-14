@@ -9,13 +9,22 @@ class Navbar extends Component {
     isActive: false,
   };
 
+  handleHomeClick = event => {
+    this.setState({ isActive: false });
+  }
+
+  handleLogOut = event => {
+    this.props.handleClick();
+    this.setState({ isActive: false });
+  }
+
   handleMobileClick = event => {
     this.setState({ isActive: !this.state.isActive });
   };
 
   render() {
     const { isActive } = this.state;
-    const { isLoggedIn, handleClick } = this.props;
+    const { isLoggedIn } = this.props;
     return (
       <div>
         <nav
@@ -26,7 +35,7 @@ class Navbar extends Component {
           <div className="navbar-brand">
             <Link
               className="navbar-item is-logo has-text-danger has-text-weight-bold is-size-4"
-              to="/"
+              to="/" onClick={this.handleHomeClick}
             >
               Simmer
             </Link>
@@ -49,32 +58,32 @@ class Navbar extends Component {
           >
             {isLoggedIn ? (
               <div className="navbar-end">
-                <Link className="navbar-item has-text-danger" to="/home">
+                <Link className="navbar-item has-text-danger" to="/home" onClick={this.handleMobileClick}>
                   Home
                 </Link>
-                <Link className="navbar-item has-text-danger" to="/search">
+                <Link className="navbar-item has-text-danger" to="/search" onClick={this.handleMobileClick}>
                   Search
                 </Link>
                 <Link
                   className="navbar-item has-text-danger"
-                  to="/recommendations"
+                  to="/recommendations" onClick={this.handleMobileClick}
                 >
                   Recommendations
                 </Link>
                 <Link
                   className="navbar-item has-text-danger"
                   to="/"
-                  onClick={handleClick}
+                  onClick={this.handleLogOut}
                 >
                   Log Out
                 </Link>
               </div>
             ) : (
               <div className="navbar-end">
-                <Link className="navbar-item has-text-danger" to="/login">
+                <Link className="navbar-item has-text-danger" to="/login" onClick={this.handleMobileClick}>
                   Log In
                 </Link>
-                <Link className="navbar-item has-text-danger" to="/signup">
+                <Link className="navbar-item has-text-danger" to="/signup" onClick={this.handleMobileClick}>
                   Sign Up
                 </Link>
               </div>
