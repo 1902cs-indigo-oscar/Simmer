@@ -41,8 +41,11 @@ class Article extends Component {
           </div>
         </div>
         <h1 className="title is-size-2-desktop">{article.title}</h1>
-        <h6 className="title is-size-5-desktop">{article.author}</h6>
-        <a href={article.url} className="title is-4 has-text-link is-italic">
+        <h6 className="title is-size-4-desktop">{article.author}</h6>
+        <a
+          href={article.url}
+          className="title is-size-4 has-text-link is-italic"
+        >
           {article.site}
         </a>
         <br />
@@ -50,46 +53,54 @@ class Article extends Component {
         <img src={article.imageUrl} alt={article.title} />
         <br />
         <br />
-        <div className="ingredients">
-          <h2 className="title-is-3">
-            <u>INGREDIENTS:</u>
-          </h2>
-          <ul>
-            {article.ingredients &&
-              article.ingredients.map((ingredient, index) => (
-                <li key={index}>
-                  {'>'} {ingredient.text} {'<'}
-                </li>
-              ))}
-          </ul>
+        <div className="columns is-centered">
+          <div className="column is-three-fifths is-mobile">
+            <div className="box ingredients">
+              <h2 className="title is-size-4-mobile">
+                <u>INGREDIENTS:</u>
+              </h2>
+              <ul>
+                {article.ingredients &&
+                  article.ingredients.map((ingredient, index) => (
+                    <li key={index}>
+                      {'>'} {ingredient.text} {'<'}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>
         </div>
         <br />
-        <div className="instructions">
-          <h2 className="title-is-3">
-            <u>INSTRUCTIONS:</u>
-          </h2>
-          <ul>
-            {article.instructions &&
-              article.instructions.map((instruction, index) => (
-                <li key={index}>
-                  {index + 1}. {instruction}
-                  <br />
-                  <br />
-                </li>
-              ))}
-          </ul>
+        <div className="columns">
+          <div className="column">
+            <div className="box instructions">
+              <h2 className="title is-size-4-mobile">
+                <u>INSTRUCTIONS:</u>
+              </h2>
+              <ul>
+                {article.instructions &&
+                  article.instructions.map((instruction, index) => (
+                    <li key={index}>
+                      {index + 1}. {instruction}
+                      <br />
+                      <br />
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>
         </div>
         <hr />
         <div className="columns">
           <div className="column is-half">
-            <div className="tags-list">
+            <div className="box tags-list">
               <h2 className="title-is-3">
                 <u>TAGS:</u>
               </h2>
               <ul>
                 {article.tags &&
                   article.tags.map((tag, index) => (
-                    <li key={index} className="is-size-7">
+                    <li key={index} className="is-size-6">
                       {tag}
                     </li>
                   ))}
@@ -97,7 +108,7 @@ class Article extends Component {
             </div>
           </div>
           <div className="column is-half">
-            <div className="misc">
+            <div className="box misc">
               <h2 className="title-is-3">
                 <u>MISCELLANEOUS:</u>
               </h2>
@@ -115,6 +126,10 @@ class Article extends Component {
         <style jsx="">{`
           .all-articles-container {
             margin: 1em;
+          }
+          .box {
+            border: 0.1em solid rgba(0, 0, 0, 0.3);
+            box-shadow: 0.1em 0.5em 1em  0.5em rgba(0, 0, 0, 0.2);
           }
           img {
             width: 300px;

@@ -52,9 +52,14 @@ export const ArticleList = ({
           .button {
             margin: 1em 0.5em 0 0;
           }
+          .card {
+            border: 0.1em solid rgba(0, 0, 0, 0.3);
+            border-radius: 1em;
+            box-shadow: 0.3em 0.5em rgba(0, 0, 0, 0.4);
+          }
           img {
             border: 5px solid rgba(0, 0, 0, 0);
-            border-radius: 15px;
+            border-radius: 2em;
           }
         `}</style>
     </div>
