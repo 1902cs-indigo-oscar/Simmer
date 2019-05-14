@@ -8,7 +8,7 @@ function toggleIcon() {
     let url = tabs[0].url, site = '';
     const urlTail = url.split("www.")[1];
     if (urlTail) site = urlTail.split(".com")[0];
-    if (url && scraper[site] && url.includes('/recipe')) {
+    if (url && scraper[site]) {
       chrome.browserAction.setIcon({ path: "enabled.png" });
     }
     else {

@@ -81,7 +81,7 @@ function checkLoginStatus() {
       response.json().then(data => {
         const logoutButton = document.createElement('button');
         logoutButton.innerText = 'logout';
-        if (url && scraper[site] && url.includes('/recipe'))
+        if (url && scraper[site])
           savePageButton.disabled = false;
         logoutButton.onclick = function () {
           savePageButton.disabled = true;
