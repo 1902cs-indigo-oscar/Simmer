@@ -106,42 +106,44 @@ const recipesList = [
   "https://www.epicurious.com/recipes/food/views/chicken-saltimbocca-with-crunchy-pea-salad"
 ];
 
+const userData = [
+  {
+    firstName: "Bob",
+    lastName: "Builder",
+    email: "bb@builder.com",
+    password: "123"
+  },
+  {
+    firstName: "Joe",
+    lastName: "Shmoe",
+    email: "js@gmail.com",
+    password: "123"
+  },
+  {
+    firstName: "Cody",
+    lastName: "Ruff",
+    email: "cody@gmail.com",
+    password: "123"
+  },
+  {
+    firstName: "Jane",
+    lastName: "Doe",
+    email: "jane@gmail.com",
+    password: "123"
+  },
+  {
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@gmail.com",
+    password: "123"
+  }
+]
+
 async function seed() {
   try {
     await db.sync({ force: true });
     const users = await User.bulkCreate(
-      [
-        {
-          firstName: "Bob",
-          lastName: "Builder",
-          email: "bb@builder.com",
-          password: "123"
-        },
-        {
-          firstName: "Joe",
-          lastName: "Shmoe",
-          email: "js@gmail.com",
-          password: "123"
-        },
-        {
-          firstName: "Cody",
-          lastName: "Ruff",
-          email: "cody@gmail.com",
-          password: "123"
-        },
-        {
-          firstName: "Jane",
-          lastName: "Doe",
-          email: "jane@gmail.com",
-          password: "123"
-        },
-        {
-          firstName: "John",
-          lastName: "Doe",
-          email: "john@gmail.com",
-          password: "123"
-        }
-      ],
+      userData,
       { returning: true }
     );
 
