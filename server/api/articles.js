@@ -299,9 +299,6 @@ router.get("/search/:word", async (req, res, next) => {
         ]
       });
       articles = articles.concat(articlesByTitle);
-      if (!articles.length) {
-        throw new Error("No matching recipes");
-      }
       let uniqueArticle = {};
       let filteredArticles = [];
       articles.forEach(article => {
@@ -310,6 +307,9 @@ router.get("/search/:word", async (req, res, next) => {
           uniqueArticle[article.id] = true;
         }
       });
+      if (!filteredArticles.length) {
+        throw new Error("No matching recipes");
+      }
       res.json(filteredArticles);
     } else {
       res.sendStatus(404);
