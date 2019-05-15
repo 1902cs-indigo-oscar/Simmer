@@ -50,6 +50,7 @@ class Signup extends Component {
                 type={inputType}
                 placeholder={label}
                 name={name}
+                required
               />
               <span className="icon is-small is-left">
                 <i className={fasType} />
