@@ -11,6 +11,7 @@ import {
 
 class Article extends Component {
   componentDidMount() {
+    window.scrollTo(0,0)
     this.props.loadSingleArticle(this.props.match.params.id);
   }
 
