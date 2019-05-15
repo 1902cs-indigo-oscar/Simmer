@@ -1,10 +1,10 @@
-const router = require('express').Router();
-const { Article, User, Ingredient } = require('../db/models');
-const scraperObj = require('../scraping');
-const { Op } = require('sequelize');
+const router = require("express").Router();
+const { Article, User, Ingredient } = require("../db/models");
+const scraperObj = require("../scraping");
+const { Op } = require("sequelize");
 module.exports = router;
 
-router.all('*', async (req, res, next) => {
+router.all("*", async (req, res, next) => {
   if (!req.user) {
     res.sendStatus(401);
   } else {
@@ -12,7 +12,7 @@ router.all('*', async (req, res, next) => {
   }
 });
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     if (req.user) {
       const articles = await Article.findAll({
@@ -20,10 +20,10 @@ router.get('/', async (req, res, next) => {
           {
             model: User,
             where: {
-              id: req.user.id,
-            },
-          },
-        ],
+              id: req.user.id
+            }
+          }
+        ]
       });
       res.json(articles);
     } else {
@@ -34,16 +34,16 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     if (req.user) {
-      let urlTail = req.body.url.split('www.')[1];
-      const urlBase = urlTail.split('.com')[0];
+      let urlTail = req.body.url.split("www.")[1];
+      const urlBase = urlTail.split(".com")[0];
       const newArticle = await scraperObj[urlBase](req.body.url);
       let createdArticle = await Article.findOne({
         where: {
-          url: req.body.url,
-        },
+          url: req.body.url
+        }
       });
       if (!createdArticle) {
         createdArticle = await Article.create(newArticle);
@@ -59,14 +59,14 @@ router.post('/', async (req, res, next) => {
           {
             model: User,
             through: {
-              attributes: ['userId'],
+              attributes: ["userId"],
               where: {
-                userId: req.user.id,
-              },
-            },
+                userId: req.user.id
+              }
+            }
           },
-          { model: Ingredient },
-        ],
+          { model: Ingredient }
+        ]
       });
       res.json(finalArticle);
     } else {
@@ -77,7 +77,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.get('/recommendations', async (req, res, next) => {
+router.get("/recommendations", async (req, res, next) => {
   try {
     if (req.user) {
       const usersArticles = await Article.findAll({
@@ -85,10 +85,10 @@ router.get('/recommendations', async (req, res, next) => {
           {
             model: User,
             where: {
-              id: req.user.id,
-            },
-          },
-        ],
+              id: req.user.id
+            }
+          }
+        ]
       });
       const usersArticlesId = [];
       usersArticles.forEach(
@@ -97,19 +97,19 @@ router.get('/recommendations', async (req, res, next) => {
       const linkedUsers = await User.findAll({
         where: {
           id: {
-            [Op.ne]: req.user.id,
-          },
+            [Op.ne]: req.user.id
+          }
         },
         include: [
           {
             model: Article,
             where: {
               id: {
-                [Op.in]: usersArticlesId,
-              },
-            },
-          },
-        ],
+                [Op.in]: usersArticlesId
+              }
+            }
+          }
+        ]
       });
       const linkedUsersId = linkedUsers.map(user => user.id);
       const articles = await Article.findAll({
@@ -118,11 +118,11 @@ router.get('/recommendations', async (req, res, next) => {
             model: User,
             where: {
               id: {
-                [Op.in]: linkedUsersId,
-              },
-            },
-          },
-        ],
+                [Op.in]: linkedUsersId
+              }
+            }
+          }
+        ]
       });
       const recommendations = [];
       articles.map(article => {
@@ -138,7 +138,7 @@ router.get('/recommendations', async (req, res, next) => {
   }
 });
 
-router.get('/:articleId', async (req, res, next) => {
+router.get("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
       const id = Number(req.params.articleId);
@@ -148,13 +148,13 @@ router.get('/:articleId', async (req, res, next) => {
           {
             model: User,
             through: {
-              attributes: ['userId'],
+              attributes: ["userId"],
               where: {
-                userId: req.user.id,
-              },
-            },
-          },
-        ],
+                userId: req.user.id
+              }
+            }
+          }
+        ]
       });
       res.json(article);
     } else {
@@ -165,7 +165,7 @@ router.get('/:articleId', async (req, res, next) => {
   }
 });
 
-router.delete('/:articleId', async (req, res, next) => {
+router.delete("/:articleId", async (req, res, next) => {
   try {
     if (req.user) {
       const id = Number(req.params.articleId);
@@ -180,7 +180,7 @@ router.delete('/:articleId', async (req, res, next) => {
   }
 });
 
-router.post('/scraped', async (req, res, next) => {
+router.post("/scraped", async (req, res, next) => {
   const {
     url,
     site,
@@ -190,14 +190,14 @@ router.post('/scraped', async (req, res, next) => {
     instructions,
     imageUrl,
     tags,
-    misc,
+    misc
   } = req.body;
   if (url && site && title && ingredients && instructions) {
     try {
       let createdArticle = await Article.findOne({
         where: {
-          url: req.body.url,
-        },
+          url: req.body.url
+        }
       });
       if (!createdArticle) {
         createdArticle = await Article.create({
@@ -208,7 +208,7 @@ router.post('/scraped', async (req, res, next) => {
           instructions,
           imageUrl,
           tags,
-          misc,
+          misc
         });
         ingredients.forEach(async ingredient => {
           const newIngred = await Ingredient.create({ text: ingredient });
@@ -222,43 +222,16 @@ router.post('/scraped', async (req, res, next) => {
           {
             model: User,
             through: {
-              attributes: ['userId'],
+              attributes: ["userId"],
               where: {
-                userId: req.user.id,
-              },
-            },
+                userId: req.user.id
+              }
+            }
           },
-          { model: Ingredient },
-        ],
+          { model: Ingredient }
+        ]
       });
       res.json(finalArticle);
-      // WANT TO MAKE SURE EXTENSION WORKS WITH ABOVE CODE BEFORE REMOVING BELOW
-      // const existingArticle = await Article.findOne({
-      //   where: {
-      //     url
-      //   }
-      // });
-      // if (existingArticle) {
-      //   await req.user.addArticle(existingArticle);
-      //   res.status(204).json(existingArticle);
-      // } else {
-      //   const newArticle = await Article.create({
-      //     url,
-      //     site,
-      //     title,
-      //     author,
-      //     instructions,
-      //     imageUrl,
-      //     tags,
-      //     misc
-      //   });
-      //   await req.user.addArticle(newArticle);
-      //   ingredients.forEach(async ingredient => {
-      //     const newIngred = await Ingredient.create({ text: ingredient });
-      //     newArticle.addIngredient(newIngred.id);
-      //   });
-      //   res.json(newArticle);
-      // }
     } catch (err) {
       next(err);
     }
@@ -267,37 +240,34 @@ router.post('/scraped', async (req, res, next) => {
   }
 });
 
-router.get('/search/:word', async (req, res, next) => {
+router.get("/search/:word", async (req, res, next) => {
   try {
     if (req.user) {
       const { id } = req.user;
       const ingredArray = await Ingredient.findAll({
         where: {
           text: {
-            [Op.iLike]: `%${req.params.word}%`,
-          },
+            [Op.iLike]: `%${req.params.word}%`
+          }
         },
         include: [
           {
             model: Article,
-            as: 'article',
+            as: "article",
             include: [
               {
                 model: User,
                 through: {
-                  attributes: ['userId'],
+                  attributes: ["userId"],
                   where: {
-                    userId: id,
-                  },
-                },
-              },
-            ],
-          },
-        ],
+                    userId: id
+                  }
+                }
+              }
+            ]
+          }
+        ]
       });
-      if (!ingredArray.length) {
-        throw new Error('No matching recipes');
-      }
       let articles = ingredArray.map(ingred => {
         return ingred.article;
       });
@@ -306,27 +276,27 @@ router.get('/search/:word', async (req, res, next) => {
           [Op.or]: [
             {
               title: {
-                [Op.iLike]: `%${req.params.word}%`,
-              },
+                [Op.iLike]: `%${req.params.word}%`
+              }
             },
             {
               tags: {
-                [Op.overlap]: [req.params.word.toLowerCase()],
-              },
-            },
-          ],
+                [Op.overlap]: [req.params.word.toLowerCase()]
+              }
+            }
+          ]
         },
         include: [
           {
             model: User,
             through: {
-              attributes: ['userId'],
+              attributes: ["userId"],
               where: {
-                userId: id,
-              },
-            },
-          },
-        ],
+                userId: id
+              }
+            }
+          }
+        ]
       });
       articles = articles.concat(articlesByTitle);
       let uniqueArticle = {};
@@ -337,6 +307,9 @@ router.get('/search/:word', async (req, res, next) => {
           uniqueArticle[article.id] = true;
         }
       });
+      if (!filteredArticles.length) {
+        throw new Error("No matching recipes");
+      }
       res.json(filteredArticles);
     } else {
       res.sendStatus(404);
