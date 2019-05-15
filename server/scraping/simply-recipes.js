@@ -17,7 +17,7 @@ const simplyrecipesScraper = url => {
         .text()
         .trim()
         .split(/\n/)
-        .filter(ingred => ingred.length > 0);
+        .filter(ingred => ingred.length);
       let times = $(".recipe-meta ul", html)
         .each(function() {
           $("li", this).append("**");

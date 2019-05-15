@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { auth } from '../store';
+import { auth, clearError } from '../store';
 
 class Login extends Component {
   state = {
@@ -17,6 +17,10 @@ class Login extends Component {
       },
     ],
   };
+
+  componentDidMount() {
+    this.props.resetError();
+  }
 
   renderInputFields(name, label, fasType, i) {
     return (
@@ -47,29 +51,31 @@ class Login extends Component {
     const { fields } = this.state;
     const { name, handleSubmit, error } = this.props;
     return (
-        <section className="hero is-fullheight-with-navbar has-background-primary has-text-centered">
-          <div className="hero-body">
-            <div className="container">
-              <h1 className="title has-text-weight-semibold">Log In</h1>
-              <div className="columns is-centered">
-                <div className="column is-half">
-                  <form className="" onSubmit={handleSubmit} name={name}>
-                    {fields.map(({ name, label, fasType }, i) => {
-                      return this.renderInputFields(name, label, fasType, i);
-                    })}
-                    <br />
-                    <button className="button is-danger" type="submit">
-                      Submit
-                    </button>
-                    {error && error.response && (
-                      <div> {error.response.data} </div>
-                    )}
-                  </form>
-                </div>
+      <section className="hero is-fullheight-with-navbar has-background-primary has-text-centered">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title has-text-weight-semibold">Log In</h1>
+            <div className="columns is-centered">
+              <div className="column is-half">
+                <form className="" onSubmit={handleSubmit} name={name}>
+                  {fields.map(({ name, label, fasType }, i) => {
+                    return this.renderInputFields(name, label, fasType, i);
+                  })}
+                  <br />
+                  <button className="button is-danger" type="submit">
+                    Submit
+                  </button>
+                  <br />
+                  <br />
+                  {error && error.response && (
+                    <div> {error.response.data} </div>
+                  )}
+                </form>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
     );
   }
 }
@@ -87,6 +93,9 @@ const mapDispatch = (dispatch, ownProps) => ({
     const password = evt.target.password.value;
     const { history } = ownProps;
     dispatch(auth(email, password, formName, null, null, history));
+  },
+  resetError() {
+    dispatch(clearError());
   },
 });
 

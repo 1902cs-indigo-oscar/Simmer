@@ -1,17 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  fetchArticlesByIngredient,
   clearArticles,
   addArticleToUser,
   removeArticleFromUser,
+  getRecommendations,
+  loadingArticle,
   changeOpacity,
   addBookmark,
   removeBookmark
 } from "../store";
 import { ArticleList } from "./ArticleList";
 
-class Search extends Component {
+class Recommendations extends Component {
+  componentDidMount() {
+    this.props.loadingArticleMessage();
+    this.props.loadAllArticles();
+  }
+
   componentWillUnmount() {
     this.props.clearLoadedArticles();
   }
@@ -19,7 +25,6 @@ class Search extends Component {
   render() {
     const {
       articles,
-      loadArticlesByText,
       bookmarkArticle,
       removeBookmark,
       history,
@@ -35,38 +40,9 @@ class Search extends Component {
         </div>
         <div>
           <h1 className="title is-size-2-desktop">
-            Have an ingredient?
-            <br />
-            Enter it to find recipes!
+            We think you might like the following recipes:
           </h1>
-          <form
-            action="submit"
-            name="ingredient"
-            onSubmit={evt => loadArticlesByText(evt)}
-          >
-            <div className="columns is-centered">
-              <div className="column is-two-thirds">
-                <div className="field">
-                  <div className="control has-icons-left">
-                    <input
-                      className="input"
-                      type="text"
-                      name="ingredient"
-                      placeholder="Enter an ingredient here"
-                    />
-                    <span className="icon is-small is-left">
-                      <i className="fas fa-cheese" />
-                    </span>
-                  </div>
-                </div>
-                <button className="button is-success is-medium" type="submit">
-                  Find Recipes
-                </button>
-              </div>
-            </div>
-          </form>
-          <br />
-          {articles.length ? (
+          {articles && articles.length ? (
             <ArticleList
               articles={articles}
               history={history}
@@ -75,25 +51,25 @@ class Search extends Component {
             />
           ) : (
             <p className="has-text-danger is-size-4-desktop">
-              Enter an ingredient above to find recipes!
+              Sorry, we're having some trouble finding you recommendations.
+              <br />
+              Bookmark some recipes so we can help find you more!
             </p>
           )}
+          <br />
         </div>
         <style jsx="">{`
-          * {
-            font-family: "Aclonica", sans-serif;
-          }
           .all-articles-container {
             margin: 3em;
+          }
+          img {
+            object-fit: cover;
           }
           .box {
             opacity: ${opacity};
             transition: 0.5s all;
             z-index: 2;
             position: fixed;
-          }
-          img {
-            object-fit: cover;
           }
         `}</style>
       </div>
@@ -109,11 +85,11 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => ({
-  loadArticlesByText: evt => {
-    evt.preventDefault();
-    const text = evt.target.ingredient.value;
-    dispatch(fetchArticlesByIngredient(text));
-    evt.target.ingredient.value = "";
+  loadAllArticles: () => {
+    dispatch(getRecommendations());
+  },
+  loadingArticleMessage: () => {
+    dispatch(loadingArticle());
     setTimeout(() => {
       dispatch(changeOpacity());
     }, 1000);
@@ -138,4 +114,4 @@ const mapDispatch = dispatch => ({
 export default connect(
   mapState,
   mapDispatch
-)(Search);
+)(Recommendations);

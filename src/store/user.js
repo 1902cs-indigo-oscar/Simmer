@@ -45,6 +45,10 @@ export const auth = (
   }
 };
 
+export const clearError = () => dispatch => {
+  return dispatch(getUser({ error: '' }));
+}
+
 export const logout = () => async dispatch => {
   try {
     await axios.post('/auth/logout');
