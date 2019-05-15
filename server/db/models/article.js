@@ -53,8 +53,14 @@ const Article = db.define(
   }
 );
 
-Article.beforeValidate((article, tags) => {
+Article.beforeValidate(article => {
   article.tags = article.tags.map(tag => tag.toLowerCase());
+});
+
+Article.beforeValidate(article => {
+  article.instructions = article.instructions.filter(instruction =>
+    instruction.match(/[a-zA-Z0-9]+/g)
+  );
 });
 
 module.exports = Article;
