@@ -62,7 +62,7 @@ Another way users can find more articles is through the recommendations option. 
 
 ## Web Scraping
 
-
+Simmer uses web scraping in order to pull the desired information from the bookmarked site and save that information to the database. The two tools utilized for this are Request-Promise and Cheerio. Request-Promise is used to retrieve the HTML data from the input URL, which is then passed in as the argument for a function that uses Cheerio. Cheerio implements jQuery in order to select DOM elements from the input HTML. Obviously each website is going to have a different layout for their recipe page... hence why at the moment there are only five supported cooking sites.
 
 ## Finding/Creating Recipes in the Database
 
@@ -72,7 +72,15 @@ In the backend, the route for adding a recipe (POST to /api/article) first check
 
 ## Search
 
+The search function is performed through an API route utilizing two separate Sequelize queries. The first checks all ingredients in the database and returns all that include a substring of the input text (using the "Op.iLike" operator to find case insensitive), in addition to the associated article. The second check looks through all articles and returns those that include the substring in either the title or tags array. The first list is mapped over to just include the article, and then the second list is concatenated with the first for a complete list of matching articles. Finally, a hash table and map is used to filter out any duplicate entries.
+
 ## Recommendations
 
+The recommendations API route is set up with three steps for querying:
 
+1. Find all of the current user's articles. The IDs for these are then stored in an array.
+2. Find all users who are "linked" to the current user: they must have at least one bookmarked article in common. These user ID's are again stored in another array for the next step.
+3. Find all articles where at least one of the "linked" users is associated.
+
+After the third query, a final output array is made by filtering out any articles that were present in the first array of articles - we don't want to include the recipes already bookmarked by the current user.
 
