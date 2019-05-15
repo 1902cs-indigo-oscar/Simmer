@@ -39,7 +39,7 @@ export const getError = err => dispatch => {
 
 export const getSearchError = err => dispatch => {
   if (err) {
-    dispatch(gotSearchError('No recipes found with that ingredient...'));
+    dispatch(gotSearchError('No recipes found...'));
   }
 }
 
