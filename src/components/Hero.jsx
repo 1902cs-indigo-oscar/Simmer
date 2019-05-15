@@ -5,7 +5,7 @@ const Hero = () => (
   <section className="hero is-fullheight-with-navbar is-danger">
     <div className="hero-body">
       <div className="container has-text-centered has-text-black">
-        <img src={logo} width="100" height="50" />
+        <img src={logo} alt='homepage' width="100" height="50" />
         <h1 className="title has-text-black">Simmer</h1>
         <h2 className="subtitle has-text-black">Find recipes. Get cookin'.</h2>
         <Link className="button is-link has-text-black" to="/signup">
