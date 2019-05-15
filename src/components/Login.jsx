@@ -36,6 +36,7 @@ class Login extends Component {
                 type={name}
                 placeholder={label}
                 name={name}
+                required
               />
               <span className="icon is-small is-left">
                 <i className={fasType} />
