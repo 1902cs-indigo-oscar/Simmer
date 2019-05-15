@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Simmer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Scrapes web sites and uploads the contents to the Simmer service.",
   "browser_action": {
     "default_title": "Simmer",
