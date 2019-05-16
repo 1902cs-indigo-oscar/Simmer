@@ -13,7 +13,6 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "pg": "^7.10.0",
-    "puppeteer": "^1.15.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.3",
